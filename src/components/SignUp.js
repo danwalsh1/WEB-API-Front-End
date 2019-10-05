@@ -33,7 +33,7 @@ class SignUp extends React.Component{
                 <Button type="primary" onClick={this.showModal}>
                     Sign Up
                 </Button>
-                <Modal title="Sign Up" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                <Modal title="Sign Up" visible={this.state.visible} okText="Register" onOk={this.handleOk} onCancel={this.handleCancel}>
                     <p>Form will go here!</p>
                 </Modal>
             </div>
