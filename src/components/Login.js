@@ -38,6 +38,7 @@ class Login extends React.Component{
             <Modal
               title="Login"
               visible={this.state.visible}
+              okText='Login'
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
@@ -58,12 +59,6 @@ class Login extends React.Component{
                         placeholder="Password"
                         />,
                     )}
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Log in
-                        </Button>
                     </Form.Item>
 
                 </Form>
