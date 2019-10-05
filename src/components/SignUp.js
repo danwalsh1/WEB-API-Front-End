@@ -1,6 +1,16 @@
 import React from 'react';
 import {Modal, Button, Form, Icon, Input} from 'antd';
 
+/* USAGE:
+*  To use this component you first need to do:
+*  const SignUpForm = Form.create({name: 'signup'})(SignUp);
+*
+*  You can then use:
+*  <SignUpForm />
+*
+*  to put the button onto the page
+*/
+
 class SignUp extends React.Component{
     constructor(props){
         super(props);
@@ -18,6 +28,7 @@ class SignUp extends React.Component{
         this.compareToFirstPassword = this.compareToFirstPassword.bind(this);
     }
 
+    /* Modal Functions - Start */
     showModal(){
         this.setState({visible: true});
     }
@@ -25,16 +36,25 @@ class SignUp extends React.Component{
     handleOk(ev){
         console.log(ev);
         this.setState({visible: false});
+        // TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        /* WARNING - NOTE:
+        *  After testing, this function is run when the ok button is pressed, not the "handleSubmit" function
+        */
     }
 
     handleCancel(ev){
         console.log(ev);
         this.setState({visible: false});
     }
+    /* Modal Functions - End */
 
+    /* Form Functions - Start */
     handleSubmit(ev){
         ev.preventDefault();
-        // Not sure if this function is run or the "handleOk" function is run
+        // TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        /* WARNING - NOTE:
+        *  After testing, this function is not run when the ok button is pressed, but the "handleOk" function is
+        */
     }
 
     compareToSecondPassword(rule, value, callback){
@@ -59,6 +79,7 @@ class SignUp extends React.Component{
         const {value} = ev.target;
         this.setState({confirmDirty: this.state.confirmDirty || !!value});
     }
+    /* Form Functions - End */
 
     render(){
         const {getFieldDecorator} = this.props.form;
@@ -95,6 +116,8 @@ class SignUp extends React.Component{
                             )}
                         </Form.Item>
                         <Form.Item label="Confirm Password" hasFeedback>
+                            {/* The onBlur in this input tag is the function that is run when the object "loses focus".
+                            It is, therefore, used to validate the two passwords when the user clicks off entering the second password */}
                             {getFieldDecorator('confirm', {rules: [{required: true, message: 'Confirm your password!'}, {validator: this.compareToFirstPassword}]})(
                                 <Input.Password prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25'}} />} onBlur={this.handleConfirmBlur}
                                 placeholder="Confirm Password"
