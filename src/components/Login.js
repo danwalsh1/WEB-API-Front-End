@@ -28,6 +28,12 @@ class Login extends React.Component{
         })
     }
 
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+        })
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
         return (
