@@ -40,22 +40,30 @@ class SignUp extends React.Component{
     }
 
     handleOk(ev){
+        ev.preventDefault();
         console.log(ev);
         // TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         /* WARNING - NOTE:
         *  After testing, this function is run when the ok button is pressed, not the "handleSubmit" function
         */
-       const signUpData = {username: this.state.username, password: this.state.password, confirmPassword: this.state.confirmPassword};
+       const signUpData = {username: this.state.username, password: this.state.password};
 
        // Validate fields
        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
        if(signUpData.username.length > 0 && signUpData.password.length > 0){
-            if(signUpData.password === signUpData.confirmPassword){
-                fetch('localhost:8080/api/v1.0/signup/register', {
+            if(signUpData.password === this.state.confirmPassword){
+                /*fetch('http://localhost:8080/api/v1.0/signup/register', {
                     method: 'post',
                     body: JSON.stringify(signUpData),
                     headers: {'Content-Type': 'application/json'}
-                }).then(res => res.json()).then(json => console.log(json));
+                }).then(res => res.json()).then(json => console.log(json));*/
+                fetch('http://localhost:8080/api/v1.0/signup/register', {
+                    method: 'post',
+                    body: JSON.stringify(signUpData),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => console.log(res.status));
+                console.log(signUpData);
+                console.log(JSON.stringify(signUpData));
                 this.setState({visible: false});
             }
        }
