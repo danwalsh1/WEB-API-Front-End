@@ -38,7 +38,7 @@ class Login extends React.Component{
                 method: 'post',
                 body: JSON.stringify(loginData),
                 headers: { 'Content-Type': 'application/json' },
-            }).then(response => response.json()).then(json => console.log(json));
+            }).then(response => console.log(response.status));
         }
     }
 
