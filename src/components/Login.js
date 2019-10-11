@@ -1,5 +1,6 @@
 import React from 'react'
 import {Modal, Button, Form, Icon, Input} from 'antd'
+//import { eventNames } from 'cluster';
 //import { throwStatement } from '@babel/types';
 
 class Login extends React.Component{
@@ -17,28 +18,27 @@ class Login extends React.Component{
     }
 
     handleOk = event =>{
-        console.log("ok");
         console.log(event);
-        console.log(this.state)
+        console.log(this.state);
         const loginData = {username: this.state.username, password: this.state.password}
+        event.preventDefault();
 
         // Validate fields and check to make sure neither are null.
         if (!loginData.username){
-            console.log("Username should not be null.")
+            console.log("Username should not be null.");
         }else if (!loginData.password){
-            console.log("Password should not be null.")
+            console.log("Password should not be null.");
         }else{
             this.setState({
                 visible: false,
             })
 
-            fetch("localhost:8080/api/v1.0/login/signin", {
+            const urlToFetch = "http://localhost:8080/api/v1.0/login/signin"
+            fetch(urlToFetch, {
                 method: 'post',
                 body: JSON.stringify(loginData),
-                headers: { 'Content-Type': 'application/json'},
-            })
-            .then(res => res.json())
-            .then(json => console.log(json));
+                headers: { 'Content-Type': 'application/json' },
+            }).then(response => response.json()).then(json => console.log(json));
         }
     }
 
@@ -59,11 +59,11 @@ class Login extends React.Component{
     }
 
     handleUsername = event =>{
-        this.setState({username: event.target.value})
+        this.setState({username: event.target.value});
     }
 
     handlePassword = event => {
-        this.setState({password: event.target.value})
+        this.setState({password: event.target.value});
     }
 
     render() {
