@@ -2,6 +2,11 @@ import React from 'react'
 import { Calendar, Alert } from 'antd';
 import moment from 'moment';
 
+// Testing code
+import {Form} from 'antd'
+import Login from './Login'
+const LoginForm = Form.create({name: 'login'})(Login)
+
 class CalendarClass extends React.Component {
   state = {
     value: moment('2017-01-25'),
@@ -9,6 +14,9 @@ class CalendarClass extends React.Component {
   };
 
   onSelect = value => {
+    console.log(value)
+    
+    
     this.setState({
       value,
       selectedValue: value,
@@ -26,6 +34,7 @@ class CalendarClass extends React.Component {
         <Alert
           message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
         />
+        <LoginForm/>
         <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} />
       </div>
     );
