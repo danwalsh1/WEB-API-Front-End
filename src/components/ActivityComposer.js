@@ -13,6 +13,11 @@ class ActivityComposer extends React.Component{
             location: ''
         };
 
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleUrlChange = this.handleUrlChange.bind(this);
+        this.handleLocationChange = this.handleLocationChange.bind(this);
+
         this.showModal = this.showModal.bind(this);
         this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
@@ -26,6 +31,14 @@ class ActivityComposer extends React.Component{
 
     handleOk(ev){
         ev.preventDefault();
+
+        const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location};
+
+        // Validate form
+        if(activityData.title.length > 0){
+            // Title has been given!
+            this.setState({visible: false});
+        }
     }
 
     handleCancel(ev){
@@ -39,6 +52,22 @@ class ActivityComposer extends React.Component{
 
     handleSubmit(ev){
         ev.preventDefault();
+    }
+
+    handleTitleChange(ev){
+        this.setState({title: ev.target.value});
+    }
+
+    handleDescriptionChange(ev){
+        this.setState({description: ev.target.value});
+    }
+
+    handleUrlChange(ev){
+        this.setState({url: ev.target.value});
+    }
+
+    handleLocationChange(ev){
+        this.setState({location: ev.target.value});
     }
 
     /* Form Functions - End */
