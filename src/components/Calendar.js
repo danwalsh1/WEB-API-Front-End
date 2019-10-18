@@ -14,13 +14,9 @@ class CalendarClass extends React.Component {
   };
 
   getDataFromDB() {
-    // Dummy data
     const datetime = ['22-01-2019 18:00:00','20-02-2019 20:00:00','01-05-2019 22:00:00']
     const titles = ['First title','Second title','Third title'];
     const description = ['wow so cool description','wow so cool description 2','wow so cool description 3'];
-
-    //const datetime = ['22-01-2019 18:00:00','20-02-2019 20:00:00','01-05-2019 22:00:00']
-    //var date = new Date("2011-07-14 11:23:00".replace(/-/g,"/"));
 
     const data = {
       datetime: datetime,
@@ -66,7 +62,6 @@ class CalendarClass extends React.Component {
     const tempDate = this.convertDatefromSQLtoJS(datetime[i]);
     const time = tempDate.toLocaleTimeString('it-IT')
 
-    //const tempDate = new Date(...datetimeparts)
     const activity = {
       title: titles[i],
       datetime: tempDate,
@@ -87,25 +82,7 @@ class CalendarClass extends React.Component {
     };
 
    };
-    
-    //const dateFromDB = new Date(2019, 1, 22, 18, 0, 0, 0);
 
-    //Define activity date as the date from the database and do any necessary adjustments.
-    
-
-    //console.log("Date chosen: "+dateChosen)
-    //console.log("The activity date: "+activityDate)
-
-    //if (dateChosen == activityDate) {
-    //  console.log("chosen a date with an activity.");
-    //  this.setState({ activityTitle: activity.title})
-    //}
-
-    // CURRENT STATE: Shows no content unless the user has selected the date specified at the top of this function.
-    // TODO: Show an activity in the calendar before the date gets clicked.
-
-
-    // When a date is selected set the modal title to be that date and show the modal.
     this.setState({
       value,
       selectedValue: value,
@@ -114,15 +91,11 @@ class CalendarClass extends React.Component {
     });
   };
 
-
-
   getActivityData = value => {
     const data = this.getDataFromDB()
     const datetime = data.datetime;
     const titles = data.titles;
     const description = data.description;
-
-    // Select all dates, title to from of activities where user = logged in user.
 
     const currentDateToRender = value.format('DD-MM-YYYY');
     let datesActivities;
@@ -140,9 +113,7 @@ class CalendarClass extends React.Component {
           ];
           break;
       }
-
     }
-    
     return datesActivities || [];
   }
 
@@ -170,10 +141,6 @@ class CalendarClass extends React.Component {
 
   dateCellRender = value => {
     const datesActivities = this.getActivityData(value);
-
-    // get TITLE from database where user who is related to it (made it or tagged in it).
-    // store it in an object or an array and then change the text below to work with that.
-
     return (
       <ul>
         {datesActivities.map(item => (
@@ -197,7 +164,6 @@ class CalendarClass extends React.Component {
           <p> {this.state.activityDescription} </p>
           <p> {this.state.activityTime} </p>
         </Modal>
-
 
         <Alert
           message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
