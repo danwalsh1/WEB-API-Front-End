@@ -14,7 +14,7 @@ class CalendarClass extends React.Component {
   };
 
   getDataFromDB() {
-    const datetime = ['22-01-2019 18:00:00','20-02-2019 20:00:00','01-05-2019 22:00:00']
+    const datetime = ['22-01-2019 18:00:00','21-01-2019 20:00:00','01-05-2019 22:00:00']
     const titles = ['First title','Second title','Third title'];
     const description = ['wow so cool description','wow so cool description 2','wow so cool description 3'];
 
@@ -71,8 +71,7 @@ class CalendarClass extends React.Component {
 
     const activityDate = this.convertDateToString(activity.datetime)
 
-    if (dateChosen == activityDate) {
-      console.log("chosen a date with an activity.");
+    if (dateChosen === activityDate) {
       this.setState({activityTitle: activity.title});
       this.setState({activityDescription: activity.description})
       this.setState({activityTime: activity.time})
@@ -104,9 +103,6 @@ class CalendarClass extends React.Component {
     for (i = 0; i < datetime.length; i++) {
       const date = this.convertDatefromSQLtoJS(datetime[i])
       const dateString = this.convertDateToString(date)
-
-      console.log("currentDateToRender: "+currentDateToRender)
-      console.log("Date: "+dateString)
       if (currentDateToRender === dateString){
           datesActivities = [
             { type: 'success', content: description[i], title: titles[i]}
