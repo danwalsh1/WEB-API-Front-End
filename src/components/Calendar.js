@@ -10,11 +10,12 @@ class CalendarClass extends React.Component {
     modalTitle: "null",
     activityTitle: "No content found for this date.",
     activityDescription: "No Description",
-    activityTime: 'No time'
+    activityTime: 'No time',
+    dateActvities: []
   };
 
   getDataFromDB() {
-    const datetime = ['22-01-2019 18:00:00','21-01-2019 20:00:00','01-05-2019 22:00:00']
+    const datetime = ['22-01-2017 18:00:00','22-01-2017 20:00:00','01-05-2017 22:00:00']
     const titles = ['First title','Second title','Third title'];
     const description = ['wow so cool description','wow so cool description 2','wow so cool description 3'];
 
@@ -100,14 +101,34 @@ class CalendarClass extends React.Component {
     let datesActivities;
 
     var i;
+    datesActivities = [];
+    var dateAct = []
     for (i = 0; i < datetime.length; i++) {
       const date = this.convertDatefromSQLtoJS(datetime[i])
       const dateString = this.convertDateToString(date)
       if (currentDateToRender === dateString){
-          datesActivities = [
-            { type: 'success', content: description[i], title: titles[i]}
-          ];
-          break;
+        console.log("-----")
+        console.log(dateString)
+        console.log(titles[i])
+        const activityToAppend = { key: i, type: 'success', content: description[i], title: titles[i]}
+        console.log(activityToAppend)
+        datesActivities.push(activityToAppend)
+        console.log(datesActivities)
+
+        //this.setState({
+        //  dateActvities: this.state.dateActvities.concat(activityToAppend)
+        //})
+
+        //this.setState(prevState => ({
+        //  dateActvities: [...prevState.dateActvities, activityToAppend]
+        //}))
+
+        //this.state.dateActvities.concat(activityToAppend)
+
+        //console.log(this.state.dateActvities)
+        //dateAct = this.state.dateActvities
+        //console.log("--- End ---")
+        break;
       }
     }
     return datesActivities || [];
