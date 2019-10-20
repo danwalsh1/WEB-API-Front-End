@@ -109,15 +109,18 @@ class CalendarClass extends React.Component {
       if (currentDateToRender === dateString){
         console.log("-----")
         console.log(dateString)
+        console.log(currentDateToRender)
+        console.log(i)
         console.log(titles[i])
         const activityToAppend = { key: i, type: 'success', content: description[i], title: titles[i]}
         console.log(activityToAppend)
-        datesActivities.push(activityToAppend)
-        console.log(datesActivities)
+        //datesActivities.push(activityToAppend)
+        //console.log(datesActivities)
+        //console.log("--end--")
 
-        //this.setState({
-        //  dateActvities: this.state.dateActvities.concat(activityToAppend)
-        //})
+        this.setState({
+          dateActvities: this.state.dateActvities.concat(activityToAppend)
+        })
 
         //this.setState(prevState => ({
         //  dateActvities: [...prevState.dateActvities, activityToAppend]
