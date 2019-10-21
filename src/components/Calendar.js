@@ -106,7 +106,7 @@ class CalendarClass extends React.Component {
       const date = this.convertDatefromSQLtoJS(datetime[i])
       const dateString = this.convertDateToString(date)
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', content: description[i], title: titles[i]});
+        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i]});
       };
     };
     return dateActvities || [];
@@ -135,10 +135,10 @@ class CalendarClass extends React.Component {
   };
 
   dateCellRender = value => {
-    const datesActivities = this.getActivityData(value);
+    const dateActivities = this.getActivityData(value);
     return (
       <ul className="events">
-      {datesActivities.map(item => (
+      {dateActivities.map(item => (
         <li key={item.title}>
           <Badge status={item.type} text={item.title} />
         </li>
@@ -148,12 +148,18 @@ class CalendarClass extends React.Component {
   }
 
   getModalContent = value => {
-    const datesActivities = this.getActivityData(value);
+    console.log("inside get modal content.")
+    const val = this.state.value
+    console.log("value: "+val)
+    const dateActivities = this.getActivityData(val);
+    console.log("dates: "+dateActivities)
     return (
       <ul className="events">
-      {datesActivities.map(item => (
+      {dateActivities.map(item => (
         <li key={item.title}>
-          <Badge status={item.type} text={item.title} />
+          <h1> {item.title} </h1>
+          <p> {item.description} </p>
+          <p> {item.activityTime} </p>
         </li>
       ))}
     </ul>
@@ -171,14 +177,7 @@ class CalendarClass extends React.Component {
               onOk={this.handleOk}
               onCancel={this.handleCancel}
         >
-          <h1> {this.state.activityTitle} </h1>
-          <p> {this.state.activityDescription} </p>
-          <p> {this.state.activityTime} </p>
-
-          
-          
-
-
+          {this.getModalContent()}
         </Modal>
 
         <Alert
