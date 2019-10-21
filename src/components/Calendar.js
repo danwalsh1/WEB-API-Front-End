@@ -1,6 +1,7 @@
 import React from 'react'
 import { Calendar, Alert, Modal, Badge } from 'antd';
 import moment from 'moment';
+import '../App.css';
 
 class CalendarClass extends React.Component {
   state = {
@@ -98,43 +99,17 @@ class CalendarClass extends React.Component {
     const description = data.description;
 
     const currentDateToRender = value.format('DD-MM-YYYY');
-    let datesActivities;
 
     var i;
-    datesActivities = [];
-    var dateAct = []
+    var dateActvities = [];
     for (i = 0; i < datetime.length; i++) {
       const date = this.convertDatefromSQLtoJS(datetime[i])
       const dateString = this.convertDateToString(date)
       if (currentDateToRender === dateString){
-        console.log("-----")
-        console.log(dateString)
-        console.log(currentDateToRender)
-        console.log(i)
-        console.log(titles[i])
-        const activityToAppend = { key: i, type: 'success', content: description[i], title: titles[i]}
-        console.log(activityToAppend)
-        //datesActivities.push(activityToAppend)
-        //console.log(datesActivities)
-        //console.log("--end--")
-
-        this.setState({
-          dateActvities: this.state.dateActvities.concat(activityToAppend)
-        })
-
-        //this.setState(prevState => ({
-        //  dateActvities: [...prevState.dateActvities, activityToAppend]
-        //}))
-
-        //this.state.dateActvities.concat(activityToAppend)
-
-        //console.log(this.state.dateActvities)
-        //dateAct = this.state.dateActvities
-        //console.log("--- End ---")
-        break;
-      }
-    }
-    return datesActivities || [];
+        dateActvities.push({ key: i, type: 'success', content: description[i], title: titles[i]});
+      };
+    };
+    return dateActvities || [];
   }
 
   onPanelChange = value => {
@@ -162,11 +137,26 @@ class CalendarClass extends React.Component {
   dateCellRender = value => {
     const datesActivities = this.getActivityData(value);
     return (
-      <ul>
-        {datesActivities.map(item => (
-            <Badge status={item.type} text={item.title} />
-        ))}
-      </ul>
+      <ul className="events">
+      {datesActivities.map(item => (
+        <li key={item.title}>
+          <Badge status={item.type} text={item.title} />
+        </li>
+      ))}
+    </ul>
+    );
+  }
+
+  getModalContent = value => {
+    const datesActivities = this.getActivityData(value);
+    return (
+      <ul className="events">
+      {datesActivities.map(item => (
+        <li key={item.title}>
+          <Badge status={item.type} text={item.title} />
+        </li>
+      ))}
+    </ul>
     );
   }
 
@@ -174,6 +164,7 @@ class CalendarClass extends React.Component {
     const { value, selectedValue } = this.state;
     return (
       <div>
+        
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}
               okText='Close'
@@ -183,6 +174,11 @@ class CalendarClass extends React.Component {
           <h1> {this.state.activityTitle} </h1>
           <p> {this.state.activityDescription} </p>
           <p> {this.state.activityTime} </p>
+
+          
+          
+
+
         </Modal>
 
         <Alert
