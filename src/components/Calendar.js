@@ -16,9 +16,9 @@ class CalendarClass extends React.Component {
   };
 
   getDataFromDB() {
-    const datetime = ['22-01-2017 18:00:00','22-01-2017 20:00:00','01-05-2017 22:00:00']
-    const titles = ['First title','Second title','Third title'];
-    const description = ['wow so cool description','wow so cool description 2','wow so cool description 3'];
+    const datetime = ['22-01-2017 18:00:00','22-01-2017 20:00:00','22-01-2017 22:00:00']
+    const titles = ['Go Park','Swimming','Gaming'];
+    const description = ['Go to the park with my friend.','Swimming for my birthday.','All nighter playing League of Legends with my buddies.'];
 
     const data = {
       datetime: datetime,
@@ -148,11 +148,8 @@ class CalendarClass extends React.Component {
   }
 
   getModalContent = value => {
-    console.log("inside get modal content.")
     const val = this.state.value
-    console.log("value: "+val)
     const dateActivities = this.getActivityData(val);
-    console.log("dates: "+dateActivities)
     return (
       <ul className="events">
       {dateActivities.map(item => (
@@ -175,11 +172,9 @@ class CalendarClass extends React.Component {
               visible={this.state.visible}
               okText='Close'
               onOk={this.handleOk}
-              onCancel={this.handleCancel}
-        >
+              onCancel={this.handleCancel}>
           {this.getModalContent()}
         </Modal>
-
         <Alert
           message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
         />
