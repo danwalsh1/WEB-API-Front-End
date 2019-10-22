@@ -15,9 +15,10 @@ class CalendarClass extends React.Component {
     dateActvities: []
   };
 
+  // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
-    const datetime = ['22-01-2017 18:00:00','22-01-2017 20:00:00','22-01-2017 22:00:00']
-    const titles = ['Go Park','Swimming','Gaming'];
+    const datetime =    ['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
+    const titles =      ['Go Park','Swimming','Gaming'];
     const description = ['Go to the park with my friend.','Swimming for my birthday.','All nighter playing League of Legends with my buddies.'];
 
     const data = {
@@ -29,6 +30,7 @@ class CalendarClass extends React.Component {
     return data;
   }
 
+  // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
     const temp = datetime;
     const datetimeparts = temp.split(/[- :]/);
@@ -37,6 +39,7 @@ class CalendarClass extends React.Component {
     return tempDate;
   }
 
+  // A function to convert a JavaScript Date object to a string.
   convertDateToString(datetime){
     var dd = datetime.getDate();
     var mm = datetime.getMonth();
@@ -48,6 +51,7 @@ class CalendarClass extends React.Component {
     return activityDate;
   }
 
+  // Gets time from a Date object.
   getTimeFromDate(datetime){
     const hours = datetime.getHours();
     const minutes = datetime.getMinutes();
@@ -57,41 +61,8 @@ class CalendarClass extends React.Component {
     return time;
   }
 
+  // Function that is called when a user selects a date.
   onSelect = value => {
-    const dateChosen = value.format('DD-MM-YYYY');
-    const noActivityTitle = "No content found for this date."
-    const noActivityDescription = "No Description"
-    const noActivityTime = "No time"
-
-   const data = this.getDataFromDB()
-   const datetime = data.datetime;
-   const titles = data.titles;
-   const description = data.description;
-
-   var i;
-   for (i = 0; i < datetime.length; i++) {
-    const tempDate = this.convertDatefromSQLtoJS(datetime[i]);
-    const time = tempDate.toLocaleTimeString('it-IT')
-
-    const activity = {
-      title: titles[i],
-      datetime: tempDate,
-      description: description[i],
-      time: time
-    };
-
-    const activityDate = this.convertDateToString(activity.datetime)
-
-    if (dateChosen === activityDate) {
-      this.setState({activityTitle: activity.title});
-      this.setState({activityDescription: activity.description})
-      this.setState({activityTime: activity.time})
-      break;
-    }else{
-      this.setState({ activityTitle: noActivityTitle, activityDescription: noActivityDescription, activityTime: noActivityTime})
-    };
-
-   };
 
     this.setState({
       value,
