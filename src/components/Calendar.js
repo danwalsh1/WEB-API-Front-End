@@ -17,12 +17,14 @@ class CalendarClass extends React.Component {
 
   // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
-    const datetime =    ['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
+    const datetimeFROM =['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
+    const datetimeTO =  ['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00'] 
     const titles =      ['Go Park','Swimming','Gaming'];
     const description = ['Go to the park with my friend.','Swimming for my birthday.','All nighter playing League of Legends with my buddies.'];
 
     const data = {
-      datetime: datetime,
+      datetimeFROM: datetimeFROM,
+      datetimeTO: datetimeTO,
       titles: titles,
       description: description
     }
@@ -74,7 +76,7 @@ class CalendarClass extends React.Component {
 
   getActivityData = value => {
     const data = this.getDataFromDB()
-    const datetime = data.datetime;
+    const datetimeFROM = data.datetimeFROM;
     const titles = data.titles;
     const description = data.description;
 
@@ -82,12 +84,15 @@ class CalendarClass extends React.Component {
 
     var i;
     var dateActvities = [];
-    for (i = 0; i < datetime.length; i++) {
-      const date = this.convertDatefromSQLtoJS(datetime[i])
+    for (i = 0; i < datetimeFROM.length; i++) {
+      const date = this.convertDatefromSQLtoJS(datetimeFROM[i])
       const dateString = this.convertDateToString(date)
-      const time = this.getTimeFromDate(date)
+      const timeFROM = this.getTimeFromDate(date)
+
+      //timeTO: timeTO
+
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], time: time});
+        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], timeFROM: timeFROM});
       };
     };
     return dateActvities || [];
