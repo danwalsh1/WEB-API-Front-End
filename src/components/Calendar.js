@@ -48,6 +48,15 @@ class CalendarClass extends React.Component {
     return activityDate;
   }
 
+  getTimeFromDate(datetime){
+    const hours = datetime.getHours();
+    const minutes = datetime.getMinutes();
+    const seconds = datetime.getSeconds();
+
+    const time = hours + ':' + minutes + seconds;
+    return time;
+  }
+
   onSelect = value => {
     const dateChosen = value.format('DD-MM-YYYY');
     const noActivityTitle = "No content found for this date."
@@ -105,8 +114,9 @@ class CalendarClass extends React.Component {
     for (i = 0; i < datetime.length; i++) {
       const date = this.convertDatefromSQLtoJS(datetime[i])
       const dateString = this.convertDateToString(date)
+      const time = this.getTimeFromDate(date)
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i]});
+        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], time: time});
       };
     };
     return dateActvities || [];
@@ -157,6 +167,7 @@ class CalendarClass extends React.Component {
           <h1> {item.title} </h1>
           <p> {item.description} </p>
           <p> {item.activityTime} </p>
+          <p> Time: {item.time} </p>
         </li>
       ))}
     </ul>
