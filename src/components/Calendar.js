@@ -143,7 +143,7 @@ class CalendarClass extends React.Component {
           <h1> {item.title} </h1>
           <p> {item.description} </p>
           <p> {item.activityTime} </p>
-          <p> Time: {item.time} </p>
+          <p> Time: {item.timeFROM} </p>
         </li>
       ))}
     </ul>
