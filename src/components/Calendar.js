@@ -18,7 +18,7 @@ class CalendarClass extends React.Component {
   // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
     const datetimeFROM =['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
-    const datetimeTO =  ['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00'] 
+    const datetimeTO =  ['22-01-2017 19:00:00','23-01-2017 21:00:00','22-01-2017 23:00:00'] 
     const titles =      ['Go Park','Swimming','Gaming'];
     const description = ['Go to the park with my friend.','Swimming for my birthday.','All nighter playing League of Legends with my buddies.'];
 
@@ -77,6 +77,7 @@ class CalendarClass extends React.Component {
   getActivityData = value => {
     const data = this.getDataFromDB()
     const datetimeFROM = data.datetimeFROM;
+    const datetimeTO = data.datetimeTO;
     const titles = data.titles;
     const description = data.description;
 
@@ -90,9 +91,11 @@ class CalendarClass extends React.Component {
       const timeFROM = this.getTimeFromDate(date)
 
       //timeTO: timeTO
+      const dateTO = this.convertDatefromSQLtoJS(datetimeTO[i])
+      const timeTO = this.getTimeFromDate(dateTO)
 
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], timeFROM: timeFROM});
+        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], timeFROM: timeFROM, timeTO: timeTO});
       };
     };
     return dateActvities || [];
@@ -143,7 +146,7 @@ class CalendarClass extends React.Component {
           <h1> {item.title} </h1>
           <p> {item.description} </p>
           <p> {item.activityTime} </p>
-          <p> Time: {item.timeFROM} </p>
+          <p> Time: {item.timeFROM} - {item.timeTO} </p>
         </li>
       ))}
     </ul>
