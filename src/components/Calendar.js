@@ -12,11 +12,18 @@ class CalendarClass extends React.Component {
     activityTitle: "No content found for this date.",
     activityDescription: "No Description",
     activityTime: 'No time',
-    dateActvities: []
+    dateActvities: [],
+    userId: 0
   };
 
   // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
+
+    const response = await fetch('http://localhost:8080/api/v1.0/admin/1');
+    //const myJson = response.json();
+    console.log(response)
+
+
     const datetimeFROM =['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
     const datetimeTO =  ['22-01-2017 19:00:00','23-01-2017 21:00:00','22-01-2017 23:00:00'] 
     const titles =      ['Go Park','Swimming','Gaming'];
