@@ -13,16 +13,35 @@ class CalendarClass extends React.Component {
     activityDescription: "No Description",
     activityTime: 'No time',
     dateActvities: [],
-    userId: 0
+    userId: 0,
+    dataFromDB: {},
+    dataFuncRun: false
   };
+
+  componentDidMount() {
+    fetch('http://localhost:8080/api/v1.0/admin/1')
+    .then(res => res.json())
+    .then((result) => {
+      this.setState({dataFromDB: result});
+    });
+
+    console.log("Ran.")
+  }
+
 
   // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
+    /* const hasFuncRun = this.state.dataFuncRun
+    console.log("hasFuncRun: "+hasFuncRun)
+    if (!doRun){
+      fetch('http://localhost:8080/api/v1.0/admin/1')
+    .then(res => res.json())
+    .then((result) => {
+      this.setState({dataFromDB: result});
+    });
 
-    const response = await fetch('http://localhost:8080/api/v1.0/admin/1');
-    //const myJson = response.json();
-    console.log(response)
-
+    const DBdata = this.state.dataFromDB;
+    console.log(DBdata) */
 
     const datetimeFROM =['22-01-2017 18:00:00','23-01-2017 20:00:00','22-01-2017 22:00:00']
     const datetimeTO =  ['22-01-2017 19:00:00','23-01-2017 21:00:00','22-01-2017 23:00:00'] 
@@ -36,6 +55,7 @@ class CalendarClass extends React.Component {
       description: description
     }
 
+    this.setState({dataFuncRun: true})
     return data;
   }
 
@@ -83,6 +103,7 @@ class CalendarClass extends React.Component {
 
   getActivityData = value => {
     const data = this.getDataFromDB()
+    //console.log("Data in get activity data: "+data)
     const datetimeFROM = data.datetimeFROM;
     const datetimeTO = data.datetimeTO;
     const titles = data.titles;
