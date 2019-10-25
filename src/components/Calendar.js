@@ -18,19 +18,30 @@ class CalendarClass extends React.Component {
     dataFuncRun: false
   };
 
-  componentDidMount() {
+  componentDidMount(){
     fetch('http://localhost:8080/api/v1.0/admin/1')
     .then(res => res.json())
-    .then((result) => {
-      this.setState({dataFromDB: result});
-    });
-
-    console.log("Ran.")
-  }
+    .then(
+        (result) => {
+            console.log(result)
+            this.setState({
+              dataFuncRun: true,
+              dataFromDB: result
+          });
+        },
+        (error) => {
+        this.setState({
+          dataFuncRun: true,
+            error
+        });
+        }
+    )
+}
 
 
   // Function thats gets the information from the database, currently holds dummy data that will be changed when the calendar is made functional with the back end.
   getDataFromDB() {
+
     /* const hasFuncRun = this.state.dataFuncRun
     console.log("hasFuncRun: "+hasFuncRun)
     if (!doRun){
@@ -55,16 +66,16 @@ class CalendarClass extends React.Component {
       description: description
     }
 
-    this.setState({dataFuncRun: true})
+    //this.setState({dataFuncRun: true})
     return data;
   }
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
-    const temp = datetime;
-    const datetimeparts = temp.split(/[- :]/);
+    const datetimeparts = datetime.split(/[- :]/);
+    console.log("this: "+ datetimeparts)
     const dateArr = datetimeparts.toString().split(',');
-    const tempDate = new Date(dateArr[2],dateArr[1],dateArr[0],dateArr[3],dateArr[4],dateArr[5]);
+    const tempDate = new Date(dateArr[0],dateArr[1],dateArr[2],dateArr[3],dateArr[4],dateArr[5]);
     return tempDate;
   }
 
@@ -102,29 +113,45 @@ class CalendarClass extends React.Component {
   };
 
   getActivityData = value => {
-    const data = this.getDataFromDB()
+    //const data = this.getDataFromDB()
+    //const data = this.state.dataFromDB
     //console.log("Data in get activity data: "+data)
-    const datetimeFROM = data.datetimeFROM;
-    const datetimeTO = data.datetimeTO;
-    const titles = data.titles;
-    const description = data.description;
+
+    var id = this.state.dataFromDB.id;
+    var datetimeFROM = this.state.dataFromDB.aFrom;
+    var datetimeTO = this.state.dataFromDB.aTo;
+    var titles = this.state.dataFromDB.title;
+    var description = this.state.dataFromDB.description;
+    //console.log(this.state.dataFromDB)
+
+    datetimeFROM = datetimeFROM.replace('T', ' ')
+    datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5)
+    datetimeTO = datetimeTO.replace('T', ' ')
+    datetimeTO = datetimeTO.slice(0 , datetimeTO.length-5)
+    
+    //console.log(datetimeFROM)
+    //console.log(datetimeTO)
+    
 
     const currentDateToRender = value.format('DD-MM-YYYY');
 
     var i;
     var dateActvities = [];
-    for (i = 0; i < datetimeFROM.length; i++) {
-      const date = this.convertDatefromSQLtoJS(datetimeFROM[i])
-      const dateString = this.convertDateToString(date)
-      const timeFROM = this.getTimeFromDate(date)
+    //console.log(this.state.dataFromDB)
+    const dateFrom = this.convertDatefromSQLtoJS(datetimeFROM)
+    const dateString = this.convertDateToString(dateFrom)
+    const timeFROM = this.getTimeFromDate(dateFrom)
 
-      //timeTO: timeTO
-      const dateTO = this.convertDatefromSQLtoJS(datetimeTO[i])
-      const timeTO = this.getTimeFromDate(dateTO)
+    //timeTO: timeTO
+    const dateTO = this.convertDatefromSQLtoJS(datetimeTO)
+    const timeTO = this.getTimeFromDate(dateTO)
 
-      if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', description: description[i], title: titles[i], timeFROM: timeFROM, timeTO: timeTO});
-      };
+    console.log(currentDateToRender)
+    console.log(dateString)
+
+    if (currentDateToRender === dateString){
+      console.log("made it.")
+      dateActvities.push({ key: i, type: 'success', description: description, title: titles, timeFROM: timeFROM, timeTO: timeTO});
     };
     return dateActvities || [];
   }
@@ -152,6 +179,7 @@ class CalendarClass extends React.Component {
   };
 
   dateCellRender = value => {
+    if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(value);
     return (
       <ul className="events">
@@ -166,6 +194,7 @@ class CalendarClass extends React.Component {
 
   getModalContent = value => {
     const val = this.state.value
+    if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(val);
     return (
       <ul className="events">
