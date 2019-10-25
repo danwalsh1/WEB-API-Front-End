@@ -37,6 +37,14 @@ class ActivityComposer extends React.Component{
         // Validate form
         if(activityData.title.length > 0){
             // Title has been given!
+            fetch('http://localhost:8080/api/v1.0/manage-activity/create', {
+                method: 'post',
+                body: JSON.stringify(activityData),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => console.log(res.status));
+            console.log(activityData);
+            console.log(JSON.stringify(activityData));
+            
             this.setState({visible: false});
         }
     }
