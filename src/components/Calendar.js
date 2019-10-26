@@ -24,7 +24,7 @@ class CalendarClass extends React.Component {
     .then(res => res.json())
     .then(
         (result) => {
-            console.log(result)
+            //console.log(result)
             const activityCount = result.length / 2
             this.setState({
               dataFuncRun: true,
@@ -76,7 +76,6 @@ class CalendarClass extends React.Component {
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
     const datetimeparts = datetime.split(/[- :]/);
-    console.log("this: "+ datetimeparts)
     const dateArr = datetimeparts.toString().split(',');
     const tempDate = new Date(dateArr[0],dateArr[1],dateArr[2],dateArr[3],dateArr[4],dateArr[5]);
     return tempDate;
@@ -120,46 +119,51 @@ class CalendarClass extends React.Component {
     //const data = this.state.dataFromDB
     //console.log("Data in get activity data: "+data)
 
-    var id = this.state.dataFromDB.id;
-    var datetimeFROM = this.state.dataFromDB.aFrom;
-    var datetimeTO = this.state.dataFromDB.aTo;
-    var titles = this.state.dataFromDB.title;
-    var description = this.state.dataFromDB.description;
-    //console.log(this.state.dataFromDB)
-
-    datetimeFROM = datetimeFROM.replace('T', ' ')
-    datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5)
-    datetimeTO = datetimeTO.replace('T', ' ')
-    datetimeTO = datetimeTO.slice(0 , datetimeTO.length-5)
-    
-    //console.log(datetimeFROM)
-    //console.log(datetimeTO)
-    
-
-    const currentDateToRender = value.format('DD-MM-YYYY');
-
     var i;
     var dateActvities = [];
-    //console.log(this.state.dataFromDB)
-    const dateFrom = this.convertDatefromSQLtoJS(datetimeFROM)
-    const dateString = this.convertDateToString(dateFrom)
-    const timeFROM = this.getTimeFromDate(dateFrom)
+    for (i = 0; i < this.state.activityCount; i++){
+      var dataToUse = this.state.dataFromDB[i]
+      var id = dataToUse.id;
+      var datetimeFROM = dataToUse.aFrom;
+      var datetimeTO = dataToUse.aTo;
+      var url = dataToUse.url
+      var location = dataToUse.location;
+      dataToUse = this.state.dataFromDB[i+this.state.activityCount]
+      var titles = dataToUse.title;
+      var description = dataToUse.description;
+      //console.log(this.state.dataFromDB)
 
-    //timeTO: timeTO
-    const dateTO = this.convertDatefromSQLtoJS(datetimeTO)
-    const timeTO = this.getTimeFromDate(dateTO)
-
-    console.log(currentDateToRender)
-    console.log(dateString)
-
-    if (currentDateToRender === dateString){
-      console.log("made it.")
-      for (i = 0; i < 2; i++) {
-        // Inside for loop to test to see multiple objects in dateActivities still works when rendering.
-        dateActvities.push({ key: i, type: 'success', description: description, title: titles, timeFROM: timeFROM, timeTO: timeTO});
-      }
+      datetimeFROM = datetimeFROM.replace('T', ' ')
+      datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5)
+      datetimeTO = datetimeTO.replace('T', ' ')
+      datetimeTO = datetimeTO.slice(0 , datetimeTO.length-5)
       
-    };
+      //console.log(datetimeFROM)
+      //console.log(datetimeTO)
+      
+
+      const currentDateToRender = value.format('DD-MM-YYYY');
+
+      
+      //console.log(this.state.dataFromDB)
+      const dateFrom = this.convertDatefromSQLtoJS(datetimeFROM)
+      const dateString = this.convertDateToString(dateFrom)
+      const timeFROM = this.getTimeFromDate(dateFrom)
+
+      //timeTO: timeTO
+      const dateTO = this.convertDatefromSQLtoJS(datetimeTO)
+      const timeTO = this.getTimeFromDate(dateTO)
+
+      //console.log(currentDateToRender)
+      //console.log(dateString)
+
+      if (currentDateToRender === dateString){
+        console.log(currentDateToRender)
+        dateActvities.push({ key: i, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
+      };
+      console.log(dateActvities)
+    }
+    
     return dateActvities || [];
   }
 
@@ -207,10 +211,12 @@ class CalendarClass extends React.Component {
       <ul className="events">
       {dateActivities.map(item => (
         <li key={item.title}>
-          <h1> {item.title} </h1>
-          <p> {item.description} </p>
-          <p> {item.activityTime} </p>
-          <p> Time: {item.timeFROM} - {item.timeTO} </p>
+          <h1>{item.title}</h1>
+          <p>{item.description}</p>
+          <p>Time: {item.timeFROM} - {item.timeTO}</p>
+          <p>Location: {item.location}</p>
+          <p>URL: {item.url}</p>
+          <h2>-------------------------------</h2>
         </li>
       ))}
     </ul>
