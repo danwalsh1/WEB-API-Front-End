@@ -25,9 +25,11 @@ class CalendarClass extends React.Component {
     .then(
         (result) => {
             console.log(result)
+            const activityCount = result.length / 2
             this.setState({
               dataFuncRun: true,
-              dataFromDB: result
+              dataFromDB: result,
+              activityCount: activityCount
           });
         },
         (error) => {
