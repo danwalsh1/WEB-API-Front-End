@@ -122,16 +122,18 @@ class CalendarClass extends React.Component {
     var i;
     var dateActvities = [];
     for (i = 0; i < this.state.activityCount; i++){
+      // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i]
       var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
-      var url = dataToUse.url
       var location = dataToUse.location;
+
+      // Get info from activity table
       dataToUse = this.state.dataFromDB[i+this.state.activityCount]
       var titles = dataToUse.title;
       var description = dataToUse.description;
-      //console.log(this.state.dataFromDB)
+      var url = dataToUse.url;
 
       datetimeFROM = datetimeFROM.replace('T', ' ')
       datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5)
