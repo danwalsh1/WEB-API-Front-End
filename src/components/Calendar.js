@@ -13,13 +13,14 @@ class CalendarClass extends React.Component {
     activityDescription: "No Description",
     activityTime: 'No time',
     dateActvities: [],
-    userId: 0,
+    userId: 7,
     dataFromDB: {},
     dataFuncRun: false
   };
 
   componentDidMount(){
-    fetch('http://localhost:8080/api/v1.0/admin/1')
+    let URLToFetchFrom = 'http://localhost:8080/api/v1.0/admin/'+this.state.userId
+    fetch(URLToFetchFrom)
     .then(res => res.json())
     .then(
         (result) => {
@@ -151,7 +152,11 @@ class CalendarClass extends React.Component {
 
     if (currentDateToRender === dateString){
       console.log("made it.")
-      dateActvities.push({ key: i, type: 'success', description: description, title: titles, timeFROM: timeFROM, timeTO: timeTO});
+      for (i = 0; i < 2; i++) {
+        // Inside for loop to test to see multiple objects in dateActivities still works when rendering.
+        dateActvities.push({ key: i, type: 'success', description: description, title: titles, timeFROM: timeFROM, timeTO: timeTO});
+      }
+      
     };
     return dateActvities || [];
   }
