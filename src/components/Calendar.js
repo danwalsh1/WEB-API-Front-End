@@ -25,7 +25,6 @@ class CalendarClass extends React.Component {
     .then(res => res.json())
     .then(
         (result) => {
-            //console.log(result)
             const activityCount = result.length / 2
             this.setState({
               dataFuncRun: true,
@@ -40,7 +39,7 @@ class CalendarClass extends React.Component {
         });
         }
     )
-}
+  }
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
@@ -116,10 +115,8 @@ class CalendarClass extends React.Component {
       const timeTO = this.getTimeFromDate(dateTO)
 
       if (currentDateToRender === dateString){
-        console.log(currentDateToRender)
         dateActvities.push({ key: i, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
       };
-      console.log(dateActvities)
     }
     
     return dateActvities || [];
