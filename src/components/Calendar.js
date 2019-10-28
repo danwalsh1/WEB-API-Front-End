@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Calendar, Alert, Modal, Badge } from 'antd';
 import moment from 'moment';
 import '../App.css';
@@ -20,7 +20,7 @@ class CalendarClass extends React.Component {
 
   componentDidMount(){
     // Fetches all activity data from the backend, using the logged in user's ID.
-    let URLToFetchFrom = 'http://localhost:8080/api/v1.0/admin/'+this.state.userId
+    let URLToFetchFrom = 'http://localhost:8080/api/v1.0/admin/'+this.state.userId;
     fetch(URLToFetchFrom)
     .then(res => res.json())
     .then(
@@ -38,7 +38,7 @@ class CalendarClass extends React.Component {
             error
         });
         }
-    )
+    );
   }
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
@@ -87,32 +87,32 @@ class CalendarClass extends React.Component {
     var dateActvities = [];
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
-      var dataToUse = this.state.dataFromDB[i]
+      var dataToUse = this.state.dataFromDB[i];
       var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
       var location = dataToUse.location;
 
       // Get info from activity table
-      dataToUse = this.state.dataFromDB[i+this.state.activityCount]
+      dataToUse = this.state.dataFromDB[i+this.state.activityCount];
       var titles = dataToUse.title;
       var description = dataToUse.description;
       var url = dataToUse.url;
 
-      datetimeFROM = datetimeFROM.replace('T', ' ')
-      datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5)
-      datetimeTO = datetimeTO.replace('T', ' ')
-      datetimeTO = datetimeTO.slice(0 , datetimeTO.length-5)
+      datetimeFROM = datetimeFROM.replace('T', ' ');
+      datetimeFROM = datetimeFROM.slice(0 , datetimeFROM.length-5);
+      datetimeTO = datetimeTO.replace('T', ' ');
+      datetimeTO = datetimeTO.slice(0 , datetimeTO.length-5);
 
       const currentDateToRender = value.format('DD-MM-YYYY');
 
-      const dateFrom = this.convertDatefromSQLtoJS(datetimeFROM)
-      const dateString = this.convertDateToString(dateFrom)
-      const timeFROM = this.getTimeFromDate(dateFrom)
+      const dateFrom = this.convertDatefromSQLtoJS(datetimeFROM);
+      const dateString = this.convertDateToString(dateFrom);
+      const timeFROM = this.getTimeFromDate(dateFrom);
 
       //timeTO: timeTO
-      const dateTO = this.convertDatefromSQLtoJS(datetimeTO)
-      const timeTO = this.getTimeFromDate(dateTO)
+      const dateTO = this.convertDatefromSQLtoJS(datetimeTO);
+      const timeTO = this.getTimeFromDate(dateTO);
 
       if (currentDateToRender === dateString){
         dateActvities.push({ key: i, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
