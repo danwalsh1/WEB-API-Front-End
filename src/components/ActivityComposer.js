@@ -40,7 +40,8 @@ class ActivityComposer extends React.Component{
             fetch('http://localhost:8080/api/v1.0/manage-activity/create', {
                 method: 'post',
                 body: JSON.stringify(activityData),
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:password')}
+                //headers: {'Content-Type': 'application/json'}
             }).then(res => console.log(res.status));
             console.log(activityData);
             console.log(JSON.stringify(activityData));
