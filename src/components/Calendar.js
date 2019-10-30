@@ -13,7 +13,7 @@ class CalendarClass extends React.Component {
     activityDescription: "No Description",
     activityTime: 'No time',
     dateActvities: [],
-    userId: 7,
+    userId: localStorage.getItem('userID'),
     dataFromDB: {},
     dataFuncRun: false
   };
