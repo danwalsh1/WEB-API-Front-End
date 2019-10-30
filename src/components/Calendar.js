@@ -21,11 +21,14 @@ class CalendarClass extends React.Component {
   componentDidMount(){
     // Fetches all activity data from the backend, using the logged in user's ID.
     let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
-    fetch(URLToFetchFrom)
+    fetch(URLToFetchFrom, {
+      method: 'get',
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},})
     .then(res => res.json())
     .then(
         (result) => {
             const activityCount = result.length / 2
+            console.log(result)
             this.setState({
               dataFuncRun: true,
               dataFromDB: result,

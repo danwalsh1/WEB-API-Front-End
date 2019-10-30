@@ -37,7 +37,7 @@ class Login extends React.Component{
             fetch(urlToFetch, {
                 method: 'post',
                 body: JSON.stringify(loginData),
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
             }).then(response => console.log(response.status));
         }
     }
