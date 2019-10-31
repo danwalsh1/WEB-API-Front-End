@@ -33,14 +33,30 @@ class Login extends React.Component{
                 visible: false,
             })
 
-            const urlToFetch = "http://localhost:8080/api/v1.0/login/signin"
+            var urlToFetch = "http://localhost:8080/api/v1.0/login/signin"
             fetch(urlToFetch, {
                 method: 'post',
                 body: JSON.stringify(loginData),
-                headers: { 'Content-Type': 'application/json' },
-            }).then(response => console.log(response.status));
-        }
-    }
+                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
+            }).then(response => {
+                console.log(response.status);
+                urlToFetch = "http://localhost:8080/api/v1.0/login/signin"
+                fetch(urlToFetch, {
+                    method: 'get',
+                    headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},
+                }).then(res => res.json())
+                .then((result) => {
+                    if(response.status === 200){
+                        window.userID = result;
+                        localStorage.setItem('userID', window.userID)
+                        window.location.reload();
+                        console.log(result)
+                    }
+                })
+            })
+
+            
+    }}
 
     handleSubmit = event =>{
         console.log("submit");
