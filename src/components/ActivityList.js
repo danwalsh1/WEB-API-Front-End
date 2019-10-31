@@ -1,16 +1,6 @@
 import React from 'react'
 import { List, Typography } from 'antd';
 
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
-
-
-
 class ActivityList extends React.Component{
   state = {
     userId: 7,
@@ -82,14 +72,15 @@ render() {
       bordered
       dataSource={this.getActivityData()}
       renderItem={item =>
-      <List.Item>
-      {item.title}
-      <br />
-      {item.description}
-      <br />
-      {item.url}
-      <br />
-      {item.location}</List.Item>}
+        <List.Item>
+        {item.title}
+        <br />
+        {item.description}
+        <br />
+        {item.url}
+        <br />
+        {item.location}
+        </List.Item>}
     />
   </div>
   );
