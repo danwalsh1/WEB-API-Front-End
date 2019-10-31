@@ -1,5 +1,8 @@
 import React from 'react'
-import { List, Typography } from 'antd';
+import { List } from 'antd';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Card } from 'antd';
+import '../App.css';
 
 class ActivityList extends React.Component{
   state = {
@@ -25,7 +28,6 @@ class ActivityList extends React.Component{
                 dataFromDB: result,
                 activityCount: activityCount
             });
-
           },
           (error) => {
           this.setState({
@@ -49,40 +51,29 @@ class ActivityList extends React.Component{
       console.log(this.state.dataFromDB)
       ObjectForList = ObjectForList.concat(this.state.dataFromDB[i+this.state.activityCount])
     }
-    
-    console.log(ObjectForList)
-    /*
-    var dataForList = [];
-    i = 0;
-    for (i = 0; i < ObjectForList.length; i++){
-      dataForList = dataForList.concat(ObjectForList[i].title)
-    }
-    */
+
     return ObjectForList;
   } 
 
 render() {
+  let data = this.getActivityData()
   return (
-    <div>
-    <h3 style={{ margin: '16px 0' }}>Your Activities</h3>
-    <List
-      size="large"
-      header={<div>Header</div>}
-      footer={<div>Footer</div>}
-      bordered
-      dataSource={this.getActivityData()}
-      renderItem={item =>
-        <List.Item>
-        {item.title}
-        <br />
-        {item.description}
-        <br />
-        {item.url}
-        <br />
-        {item.location}
-        </List.Item>}
-    />
-  </div>
+    <div className='activityList'>
+      <h3 style={{ margin: '16px 0' }}>Your Activities</h3>
+      <List
+        size="large"
+        dataSource={this.getActivityData()}
+        renderItem={item =>
+          <Card title={item.title} bordered={true} >
+            {item.description}
+            <br />
+            {item.url}
+            <br />
+            {item.location}
+            <br />
+          </Card>}
+      />
+    </div>
   );
 }
 }

@@ -184,7 +184,7 @@ class CalendarClass extends React.Component {
   render() {
     const { value, selectedValue } = this.state;
     return (
-      <div>
+      <div className='calendar'>
         
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}

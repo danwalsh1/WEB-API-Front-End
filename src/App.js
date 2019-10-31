@@ -18,8 +18,8 @@ function App() {
       Hello there lol
       <LoginForm />
       <SignUpForm />
+      <ActivityList />
       <Calendar />
-    <ActivityList />
     </div>
   );
 }
