@@ -4,19 +4,24 @@ import moment from 'moment';
 import '../App.css';
 
 class CalendarClass extends React.Component {
-  state = {
-    value: moment('2017-01-25'),
-    selectedValue: moment('2017-01-25'),
-    visible: false,
-    modalTitle: "null",
-    activityTitle: "No content found for this date.",
-    activityDescription: "No Description",
-    activityTime: 'No time',
-    dateActvities: [],
-    userId: localStorage.getItem('userID'),
-    dataFromDB: {},
-    dataFuncRun: false
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      value: moment('2017-01-25'),
+      selectedValue: moment('2017-01-25'),
+      visible: false,
+      modalTitle: "null",
+      activityTitle: "No content found for this date.",
+      activityDescription: "No Description",
+      activityTime: 'No time',
+      dateActvities: [],
+      userId: localStorage.getItem('userID'),
+      dataFromDB: {},
+      dataFuncRun: false
+    };
+
+    this.drop = this.drop.bind(this);
+  }
 
   componentDidMount(){
     // Fetches all activity data from the backend, using the logged in user's ID.
@@ -42,7 +47,25 @@ class CalendarClass extends React.Component {
         });
         }
     );
+
+    this.SetDroppable()
   }
+
+  drop(ev){
+    ev.preventDefault();
+    console.log(ev.dataTransfer.getData("text"));
+    console.log("lmaoofsj")
+  }
+
+  SetDroppable(){
+    var x = document.getElementsByClassName("ant-fullcalendar-cell")
+    //console.log(x)
+    var i = 0;
+    for(i=0; i < x.length; i++){
+      x[i].setAttribute("ondrop", this.drop)
+    }
+  }
+
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
@@ -150,6 +173,7 @@ class CalendarClass extends React.Component {
   dateCellRender = value => {
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(value);
+
     return (
       <ul className="events">
       {dateActivities.map(item => (
@@ -181,6 +205,11 @@ class CalendarClass extends React.Component {
     );
   }
 
+  drop(ev){
+    ev.preventDefault();
+    console.log(ev)
+  }
+
   render() {
     const { value, selectedValue } = this.state;
     return (
@@ -202,4 +231,4 @@ class CalendarClass extends React.Component {
   }
 }
 
-export default CalendarClass
+export default CalendarClass;

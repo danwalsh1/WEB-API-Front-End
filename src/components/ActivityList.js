@@ -53,7 +53,12 @@ class ActivityList extends React.Component{
     }
     console.log(ObjectForList)
     return ObjectForList;
-  } 
+  }
+
+  drag(ev){
+    ev.dataTransfer.setData("text", ev.target.id)
+    console.log("Started dragging.")
+  }
 
 render() {
   let data = this.getActivityData()
@@ -64,7 +69,7 @@ render() {
         size="large"
         dataSource={this.getActivityData()}
         renderItem={item =>
-          <Card title={item.title} bordered={true} >
+          <Card title={item.title} bordered={true} draggable="true" onDragStart={this.drag}>
             {item.description}
             <br />
             {item.url}
