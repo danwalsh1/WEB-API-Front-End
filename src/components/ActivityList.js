@@ -6,7 +6,7 @@ import '../App.css';
 
 class ActivityList extends React.Component{
   state = {
-    userId: 7,
+    userId: localStorage.getItem('userID'),
     dataFromDB: {},
     dataFuncRun: false
   };
@@ -17,7 +17,7 @@ class ActivityList extends React.Component{
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
       fetch(URLToFetchFrom, {
         method: 'get',
-        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},})
+        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
       .then(res => res.json())
       .then(
           (result) => {
@@ -51,7 +51,7 @@ class ActivityList extends React.Component{
       console.log(this.state.dataFromDB)
       ObjectForList = ObjectForList.concat(this.state.dataFromDB[i+this.state.activityCount])
     }
-
+    console.log(ObjectForList)
     return ObjectForList;
   } 
 

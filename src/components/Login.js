@@ -40,7 +40,6 @@ class Login extends React.Component{
                 headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
             }).then(response => {
                 console.log(response.status);
-                urlToFetch = "http://localhost:8080/api/v1.0/login/signin"
                 fetch(urlToFetch, {
                     method: 'get',
                     headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},

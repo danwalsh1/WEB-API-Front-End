@@ -23,7 +23,7 @@ class CalendarClass extends React.Component {
     let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
     fetch(URLToFetchFrom, {
       method: 'get',
-      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},})
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
     .then(res => res.json())
     .then(
         (result) => {
