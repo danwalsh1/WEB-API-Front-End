@@ -15,7 +15,7 @@ class CalendarItemComposer extends React.Component{
         */
         super(props);
         this.state = {
-            visible: true,
+            visible: this.props.visible,
             title: this.props.title,
             from: null,
             to: null,
@@ -57,8 +57,10 @@ class CalendarItemComposer extends React.Component{
     }
 
     handleCancel(ev){
+        console.log("test")
         console.log(ev);
         this.setState({visible: false});
+        console.log(this.state.visible);
     }
 
     /* Modal Functions - End */

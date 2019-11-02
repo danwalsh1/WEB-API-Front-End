@@ -3,6 +3,8 @@ import { Calendar, Alert, Modal, Badge } from 'antd';
 import moment from 'moment';
 import '../App.css';
 import PropTypes from 'prop-types';
+import CalendarItemComposer from './CalendarItemComposer';
+import {Form} from 'antd'
 //import Droppable from '../Dnd/Droppable';
 
 class CalendarClass extends React.Component {
@@ -17,7 +19,8 @@ class CalendarClass extends React.Component {
     dateActvities: [],
     userId: localStorage.getItem('userID'),
     dataFromDB: {},
-    dataFuncRun: false
+    dataFuncRun: false,
+    composerVisible: false
   };
 
   componentDidMount(){
@@ -187,18 +190,26 @@ class CalendarClass extends React.Component {
   drop = (e) => {
     e.preventDefault();
     const activityId = e.dataTransfer.getData('transfer');
+    const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title")
+    const dateDropped = new Date(Date.parse(dateDroppedString))
     console.log("Dropped.");
     console.log(activityId)
     console.log("Do something.")
-    this.showModal()
-    //e.target.appendChild(document.getElementById(activityId));
 
-    /*
-    console.log(document.getElementById(activityId))
+    //console.log(Date.parse(dateDropped))
+    //this.showModal()
+    //e.target.appendChild(document.getElementById(activityId));
     
+
+    
+    console.log(document.getElementById(activityId))
+    /*
     //console.log(document.getElementById(activityId).childNodes)
     console.log(e.target)
     */
+
+    this.setState({composerVisible: true})
+    
   }
 
   allowDrop = (e) => {
@@ -208,9 +219,12 @@ class CalendarClass extends React.Component {
 
   render() {
     const { value, selectedValue } = this.state;
+    const ActivityItemComposer = Form.create({name: 'login'})(CalendarItemComposer)
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
-        
+
+        <ActivityItemComposer title="testing" visible={this.state.composerVisible}/>
+
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}
               okText='Close'

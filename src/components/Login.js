@@ -1,7 +1,5 @@
 import React from 'react'
 import {Modal, Button, Form, Icon, Input} from 'antd'
-//import { eventNames } from 'cluster';
-//import { throwStatement } from '@babel/types';
 
 class Login extends React.Component{
     constructor(props){
