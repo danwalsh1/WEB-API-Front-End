@@ -2,9 +2,8 @@ import React from 'react'
 import { List } from 'antd';
 //import { DragDropContext } from 'react-beautiful-dnd';
 import { Card } from 'antd';
-import Draggable from '../Dnd/Draggable';
-import Droppable from '../Dnd/Droppable'
 import '../App.css';
+import PropTypes from 'prop-types';
 
 class ActivityList extends React.Component{
   state = {
@@ -57,6 +56,13 @@ class ActivityList extends React.Component{
     return ObjectForList;
   }
 
+  drag = (e) =>{
+    e.dataTransfer.setData('transfer', e.target.id);
+  }
+
+  noAllowDrop = (e) => {
+      e.stopPropagation();
+  }
 
 render() {
   //let data = this.getActivityData()
@@ -67,16 +73,14 @@ render() {
         size="large"
         dataSource={this.getActivityData()}
         renderItem={item =>
-          <Draggable id="an activity">
-          <Card title={item.title} bordered={true} >
-            {item.description}
-            <br />
-            {item.url}
-            <br />
-            {item.location}
-            <br />
-          </Card>
-          </Draggable>}
+            <Card title={item.title} bordered={true} id={item.id} draggable="true" onDragStart={this.drag} onDragOver={this.noAllowDrop} >
+              {item.description}
+              <br />
+              {item.url}
+              <br />
+              {item.location}
+              <br />
+            </Card>}
       />
     </div>
   );
@@ -84,3 +88,8 @@ render() {
 }
 
 export default ActivityList;
+
+ActivityList.propTypes = {
+  id: PropTypes.number,
+  children: PropTypes.node,
+}

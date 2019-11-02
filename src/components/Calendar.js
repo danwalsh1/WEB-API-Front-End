@@ -2,27 +2,23 @@ import React from 'react';
 import { Calendar, Alert, Modal, Badge } from 'antd';
 import moment from 'moment';
 import '../App.css';
-import Droppable from '../Dnd/Droppable';
+import PropTypes from 'prop-types';
+//import Droppable from '../Dnd/Droppable';
 
 class CalendarClass extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      value: moment('2017-01-25'),
-      selectedValue: moment('2017-01-25'),
-      visible: false,
-      modalTitle: "null",
-      activityTitle: "No content found for this date.",
-      activityDescription: "No Description",
-      activityTime: 'No time',
-      dateActvities: [],
-      userId: localStorage.getItem('userID'),
-      dataFromDB: {},
-      dataFuncRun: false
-    };
-
-    this.drop = this.drop.bind(this);
-  }
+  state = {
+    value: moment('2017-01-25'),
+    selectedValue: moment('2017-01-25'),
+    visible: false,
+    modalTitle: "null",
+    activityTitle: "No content found for this date.",
+    activityDescription: "No Description",
+    activityTime: 'No time',
+    dateActvities: [],
+    userId: localStorage.getItem('userID'),
+    dataFromDB: {},
+    dataFuncRun: false
+  };
 
   componentDidMount(){
     // Fetches all activity data from the backend, using the logged in user's ID.
@@ -48,25 +44,7 @@ class CalendarClass extends React.Component {
         });
         }
     );
-
-    this.SetDroppable()
   }
-
-  drop(ev){
-    ev.preventDefault();
-    console.log(ev.dataTransfer.getData("text"));
-    console.log("lmaoofsj")
-  }
-
-  SetDroppable(){
-    var x = document.getElementsByClassName("ant-fullcalendar-cell")
-    //console.log(x)
-    var i = 0;
-    for(i=0; i < x.length; i++){
-      x[i].setAttribute("ondrop", this.drop)
-    }
-  }
-
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
   convertDatefromSQLtoJS(datetime) {
@@ -115,7 +93,7 @@ class CalendarClass extends React.Component {
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i];
-      var id = dataToUse.id;
+      //var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
       var location = dataToUse.location;
@@ -206,11 +184,32 @@ class CalendarClass extends React.Component {
     );
   }
 
+  drop = (e) => {
+    e.preventDefault();
+    const activityId = e.dataTransfer.getData('transfer');
+    console.log("Dropped.");
+    console.log(activityId)
+    console.log("Do something.")
+    this.showModal()
+    //e.target.appendChild(document.getElementById(activityId));
+
+    /*
+    console.log(document.getElementById(activityId))
+    
+    //console.log(document.getElementById(activityId).childNodes)
+    console.log(e.target)
+    */
+  }
+
+  allowDrop = (e) => {
+      e.preventDefault();
+  }
+
 
   render() {
     const { value, selectedValue } = this.state;
     return (
-      <div className='calendar'>
+      <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
         
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}
@@ -222,12 +221,15 @@ class CalendarClass extends React.Component {
         <Alert
           message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
         />
-        <Droppable id="Calendar">
         <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
-        </Droppable>
       </div>
     );
   }
 }
 
 export default CalendarClass;
+
+CalendarClass.propTypes = {
+  id: PropTypes.string,
+  children: PropTypes.node,
+}
