@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, Alert, Modal, Badge } from 'antd';
 import moment from 'moment';
 import '../App.css';
+import Droppable from '../Dnd/Droppable';
 
 class CalendarClass extends React.Component {
   constructor(props){
@@ -205,10 +206,6 @@ class CalendarClass extends React.Component {
     );
   }
 
-  drop(ev){
-    ev.preventDefault();
-    console.log(ev)
-  }
 
   render() {
     const { value, selectedValue } = this.state;
@@ -225,7 +222,9 @@ class CalendarClass extends React.Component {
         <Alert
           message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
         />
+        <Droppable id="Calendar">
         <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
+        </Droppable>
       </div>
     );
   }

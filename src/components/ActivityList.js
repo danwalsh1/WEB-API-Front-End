@@ -1,7 +1,9 @@
 import React from 'react'
 import { List } from 'antd';
-import { DragDropContext } from 'react-beautiful-dnd';
+//import { DragDropContext } from 'react-beautiful-dnd';
 import { Card } from 'antd';
+import Draggable from '../Dnd/Draggable';
+import Droppable from '../Dnd/Droppable'
 import '../App.css';
 
 class ActivityList extends React.Component{
@@ -55,13 +57,9 @@ class ActivityList extends React.Component{
     return ObjectForList;
   }
 
-  drag(ev){
-    ev.dataTransfer.setData("text", ev.target.id)
-    console.log("Started dragging.")
-  }
 
 render() {
-  let data = this.getActivityData()
+  //let data = this.getActivityData()
   return (
     <div className='activityList'>
       <h3 style={{ margin: '16px 0' }}>Your Activities</h3>
@@ -69,14 +67,16 @@ render() {
         size="large"
         dataSource={this.getActivityData()}
         renderItem={item =>
-          <Card title={item.title} bordered={true} draggable="true" onDragStart={this.drag}>
+          <Draggable id="an activity">
+          <Card title={item.title} bordered={true} >
             {item.description}
             <br />
             {item.url}
             <br />
             {item.location}
             <br />
-          </Card>}
+          </Card>
+          </Draggable>}
       />
     </div>
   );
