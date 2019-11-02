@@ -20,7 +20,8 @@ class CalendarClass extends React.Component {
     userId: localStorage.getItem('userID'),
     dataFromDB: {},
     dataFuncRun: false,
-    composerVisible: false
+    composerVisible: false,
+    dateActivityDropped: null,
   };
 
   componentDidMount(){
@@ -190,26 +191,15 @@ class CalendarClass extends React.Component {
   drop = (e) => {
     e.preventDefault();
     const activityId = e.dataTransfer.getData('transfer');
-    const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title")
-    const dateDropped = new Date(Date.parse(dateDroppedString))
+    const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title");
+    const dateActivityDropped = new Date(Date.parse(dateDroppedString));
+    this.setState({dateActivityDropped: dateActivityDropped});
+    
     console.log("Dropped.");
     console.log(activityId)
     console.log("Do something.")
 
-    //console.log(Date.parse(dateDropped))
-    //this.showModal()
-    //e.target.appendChild(document.getElementById(activityId));
-    
-
-    
-    console.log(document.getElementById(activityId))
-    /*
-    //console.log(document.getElementById(activityId).childNodes)
-    console.log(e.target)
-    */
-
     this.setState({composerVisible: true})
-    
   }
 
   allowDrop = (e) => {
