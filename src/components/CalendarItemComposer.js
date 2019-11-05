@@ -25,7 +25,8 @@ class CalendarItemComposer extends React.Component{
         };
 
         this.showModal = this.showModal.bind(this);
-        this.handleCancel = this.showModal.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.handleOk = this.handleOk.bind(this);
         this.render = this.render.bind(this);
 
         this.handleFromChange = this.handleFromChange.bind(this);
@@ -74,11 +75,11 @@ class CalendarItemComposer extends React.Component{
     }
 
     handleFromChange(ev){
-        this.setState({from: ev.target.value});
+        this.setState({from: ev.date});
     }
 
     handleToChange(ev){
-        this.setState({to: ev.target.value});
+        this.setState({to: ev.date});
     }
 
     handleLocationChange(ev){
@@ -108,17 +109,17 @@ class CalendarItemComposer extends React.Component{
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item label="From">
                             {getFieldDecorator('From', {rules: [{required: true, message: 'You need to specify a start time!'}]})(
-                                <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={this.handleFromChange} />
+                                <TimePicker format={format} onChange={this.handleFromChange} />
                             )}
                         </Form.Item>
                         <Form.Item label="To">
                             {getFieldDecorator('To', {rules: [{required: true, message: 'You need to specify an end time!'}]})(
-                                <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={this.handleToChange} />
+                                <TimePicker format={format} onChange={this.handleToChange} />
                             )}
                         </Form.Item>
                         <Form.Item label="Location">
                             {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
-                                <Input placeholder="Location" value={this.state.location} onChange={this.handleLocationChange} />
+                                <Input placeholder="Location" onChange={this.handleLocationChange} />
                             )}
                         </Form.Item>
                     </Form>

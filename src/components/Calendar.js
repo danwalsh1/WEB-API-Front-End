@@ -11,7 +11,7 @@ class CalendarClass extends React.Component {
   state = {
     value: moment('2017-01-25'),
     selectedValue: moment('2017-01-25'),
-    visible: false,
+    calendarModalVisible: false,
     modalTitle: "null",
     activityTitle: "No content found for this date.",
     activityDescription: "No Description",
@@ -90,7 +90,7 @@ class CalendarClass extends React.Component {
       value,
       selectedValue: value,
       modalTitle: `Your activities on: ${value.format('DD-MM-YYYY')}`,
-      visible: true,
+      calendarModalVisible: true,
     });
   };
 
@@ -140,19 +140,19 @@ class CalendarClass extends React.Component {
 
   showModal = () =>{
     this.setState({
-      visible: true,
+      calendarModalVisible: true,
     });
   };
 
   handleCancel = event =>{
     this.setState({
-        visible: false,
+      calendarModalVisible: false,
     });
   };
 
   handleOk = event =>{
     this.setState({
-        visible: false,
+      calendarModalVisible: false,
     });
   };
 
@@ -203,7 +203,7 @@ class CalendarClass extends React.Component {
     console.log("Do something.")
 
     // Fetch an activity.
-    const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/'+activityId
+    const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/'+activityId;
     fetch(URLToFetchFrom, {
       method: 'get',
       headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
@@ -242,7 +242,7 @@ class CalendarClass extends React.Component {
         <ActivityItemComposer title={this.state.activityTitleToPass} visible={this.state.composerVisible} location={this.state.activityLocation} activityID={this.state.activityID} date={this.state.activityDate}/>
 
         <Modal title={this.state.modalTitle}
-              visible={this.state.visible}
+              visible={this.state.calendarModalVisible}
               okText='Close'
               onOk={this.handleOk}
               onCancel={this.handleCancel}>
