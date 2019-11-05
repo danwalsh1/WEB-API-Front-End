@@ -22,6 +22,7 @@ class CalendarClass extends React.Component {
     dataFuncRun: false,
     composerVisible: false,
     dateActivityDropped: null,
+    activityLocation: null,
   };
 
   componentDidMount(){
@@ -198,6 +199,25 @@ class CalendarClass extends React.Component {
     console.log("Dropped.");
     console.log(activityId)
     console.log("Do something.")
+
+    // Fetch an activity.
+    const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByID/'+activityId
+    fetch(URLToFetchFrom, {
+      method: 'get',
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+    .then(res => res.json())
+    .then(
+        (result) => {
+            //const activityCount = result.length / 2
+            console.log(result)
+        },
+        (error) => {
+        this.setState({
+          dataFuncRun: true,
+            error
+        });
+        }
+    );
 
     this.setState({composerVisible: true})
   }
