@@ -6,6 +6,8 @@ import {Form} from 'antd'
 import Login from './components/Login'
 import SignUp from './components/SignUp';
 import ActivityComposer from './components/ActivityComposer';
+import Calendar from './components/Calendar';
+import ActivityList from './components/ActivityList';
 
 const LoginForm = Form.create({name: 'login'})(Login)
 const SignUpForm = Form.create({name: 'signup'})(SignUp);
@@ -19,6 +21,8 @@ function App() {
       <LoginForm />
       <SignUpForm />
       <ActivityComposerForm />
+      <Calendar />
+    <ActivityList />
     </div>
   );
 }
