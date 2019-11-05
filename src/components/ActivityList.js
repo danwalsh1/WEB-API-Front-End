@@ -15,7 +15,7 @@ class ActivityList extends React.Component{
   getActivities = () => {
     if (!this.state.dataFuncRun){
       // Fetches all activity data from the backend, using the logged in user's ID.
-      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/';
+      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/';
       fetch(URLToFetchFrom, {
         method: 'get',
         headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
