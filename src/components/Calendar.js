@@ -23,7 +23,7 @@ class CalendarClass extends React.Component {
     composerVisible: false,
     activityDate: null,
     activityLocation: null,
-    activityTitle: null,
+    activityTitleToPass: null,
     activityID: null,
   };
 
@@ -212,7 +212,7 @@ class CalendarClass extends React.Component {
         (result) => {
             console.log(result)
             this.setState({
-              activityTitle: result[0].title,
+              activityTitleToPass: result[0].title,
               activityID: result[0].id,
               activityLocation: result[0].location,
             });
@@ -239,7 +239,7 @@ class CalendarClass extends React.Component {
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
 
-        <ActivityItemComposer title="testing" visible={this.state.composerVisible}/>
+        <ActivityItemComposer title={this.state.activityTitleToPass} visible={this.state.composerVisible} location={this.state.activityLocation} activityID={this.state.activityID} />
 
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}
