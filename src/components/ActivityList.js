@@ -15,7 +15,7 @@ class ActivityList extends React.Component{
   getActivities = () => {
     if (!this.state.dataFuncRun){
       // Fetches all activity data from the backend, using the logged in user's ID.
-      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
+      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/';
       fetch(URLToFetchFrom, {
         method: 'get',
         headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
@@ -46,14 +46,7 @@ class ActivityList extends React.Component{
 
   getActivityData = () => {
     if (!this.state.dataFuncRun){return;}
-    var  ObjectForList = []
-    var i;
-    for (i = 0; i < this.state.activityCount; i++){
-      console.log(this.state.dataFromDB)
-      ObjectForList = ObjectForList.concat(this.state.dataFromDB[i+this.state.activityCount])
-    }
-    console.log(ObjectForList)
-    return ObjectForList;
+    return this.state.dataFromDB;
   }
 
   drag = (e) =>{
