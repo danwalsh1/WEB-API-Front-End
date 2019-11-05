@@ -17,6 +17,7 @@ class CalendarItemComposer extends React.Component{
         this.state = {
             visible: this.props.visible,
             title: this.props.title,
+            date: this.props.date,
             from: null,
             to: null,
             location: this.props.location,

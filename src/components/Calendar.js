@@ -239,7 +239,7 @@ class CalendarClass extends React.Component {
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
 
-        <ActivityItemComposer title={this.state.activityTitleToPass} visible={this.state.composerVisible} location={this.state.activityLocation} activityID={this.state.activityID} />
+        <ActivityItemComposer title={this.state.activityTitleToPass} visible={this.state.composerVisible} location={this.state.activityLocation} activityID={this.state.activityID} date={this.state.activityDate}/>
 
         <Modal title={this.state.modalTitle}
               visible={this.state.visible}
