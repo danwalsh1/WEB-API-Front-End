@@ -26,6 +26,7 @@ class CalendarItemComposer extends React.Component{
 
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.showModal.bind(this);
+        this.render = this.render.bind(this);
 
         this.handleFromChange = this.handleFromChange.bind(this);
         this.handleToChange = this.handleToChange.bind(this);
