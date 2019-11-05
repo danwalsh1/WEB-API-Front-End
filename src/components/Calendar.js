@@ -21,8 +21,10 @@ class CalendarClass extends React.Component {
     dataFromDB: {},
     dataFuncRun: false,
     composerVisible: false,
-    dateActivityDropped: null,
+    activityDate: null,
     activityLocation: null,
+    activityTitle: null,
+    activityID: null,
   };
 
   componentDidMount(){
@@ -194,7 +196,7 @@ class CalendarClass extends React.Component {
     const activityId = e.dataTransfer.getData('transfer');
     const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title");
     const dateActivityDropped = new Date(Date.parse(dateDroppedString));
-    this.setState({dateActivityDropped: dateActivityDropped});
+    this.setState({activityDate: dateActivityDropped});
     
     console.log("Dropped.");
     console.log(activityId)
@@ -208,8 +210,12 @@ class CalendarClass extends React.Component {
     .then(res => res.json())
     .then(
         (result) => {
-            //const activityCount = result.length / 2
             console.log(result)
+            this.setState({
+              activityTitle: result[0].title,
+              activityID: result[0].id,
+              activityLocation: result[0].location,
+            });
         },
         (error) => {
         this.setState({
