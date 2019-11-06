@@ -3,3 +3,16 @@
 .events {
     list-style: none;
 }
+
+.activityList {
+    float: left;
+    padding: 20px;
+    background: '#ECECEC';
+    width: 20%;
+}
+
+.calendar {
+    float: right;
+    padding: 20px;
+    width: 80%;
+}

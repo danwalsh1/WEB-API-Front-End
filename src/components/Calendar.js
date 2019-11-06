@@ -1,13 +1,15 @@
 import React from 'react';
-import { Calendar, Alert, Modal, Badge } from 'antd';
+import { Calendar, Alert, Modal, Badge, Form, Input,TimePicker } from 'antd';
 import moment from 'moment';
 import '../App.css';
+import PropTypes from 'prop-types';
+import CalendarItemComposer from './CalendarItemComposer';
 
 class CalendarClass extends React.Component {
   state = {
     value: moment('2017-01-25'),
     selectedValue: moment('2017-01-25'),
-    visible: false,
+    calendarModalVisible: false,
     modalTitle: "null",
     activityTitle: "No content found for this date.",
     activityDescription: "No Description",
@@ -15,7 +17,14 @@ class CalendarClass extends React.Component {
     dateActvities: [],
     userId: localStorage.getItem('userID'),
     dataFromDB: {},
-    dataFuncRun: false
+    dataFuncRun: false,
+    composerVisible: false,
+    activityDate: null,
+    from: null,
+    to: null,
+    location: null,
+    activityTitleToPass: null,
+    activityID: null,
   };
 
   componentDidMount(){
@@ -23,7 +32,7 @@ class CalendarClass extends React.Component {
     let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
     fetch(URLToFetchFrom, {
       method: 'get',
-      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},})
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
     .then(res => res.json())
     .then(
         (result) => {
@@ -66,11 +75,17 @@ class CalendarClass extends React.Component {
 
   // Gets time from a Date object.
   getTimeFromDate(datetime){
-    const hours = datetime.getHours();
+    var hours = datetime.getHours();
     const minutes = datetime.getMinutes();
     const seconds = datetime.getSeconds();
 
-    const time = hours + ':' + minutes + seconds;
+    if (hours < 10)
+      hours = '0' + hours
+    var time = hours + ':' + minutes + seconds;
+
+    if (time.length === 6)
+      time = time.slice(0, time.length-1)
+
     return time;
   }
 
@@ -81,7 +96,7 @@ class CalendarClass extends React.Component {
       value,
       selectedValue: value,
       modalTitle: `Your activities on: ${value.format('DD-MM-YYYY')}`,
-      visible: true,
+      calendarModalVisible: true,
     });
   };
 
@@ -91,7 +106,7 @@ class CalendarClass extends React.Component {
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i];
-      var id = dataToUse.id;
+      //var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
       var location = dataToUse.location;
@@ -131,25 +146,26 @@ class CalendarClass extends React.Component {
 
   showModal = () =>{
     this.setState({
-      visible: true,
+      calendarModalVisible: true,
     });
   };
 
   handleCancel = event =>{
     this.setState({
-        visible: false,
+      calendarModalVisible: false,
     });
   };
 
   handleOk = event =>{
     this.setState({
-        visible: false,
+      calendarModalVisible: false,
     });
   };
 
   dateCellRender = value => {
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(value);
+
     return (
       <ul className="events">
       {dateActivities.map(item => (
@@ -181,13 +197,201 @@ class CalendarClass extends React.Component {
     );
   }
 
+  drop = (e) => {
+    e.preventDefault();
+    const activityId = e.dataTransfer.getData('transfer');
+    const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title");
+    const dateActivityDropped = new Date(Date.parse(dateDroppedString));
+    this.setState({activityDate: dateActivityDropped});
+
+    // Fetch an activity.
+    const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/'+activityId;
+    fetch(URLToFetchFrom, {
+      method: 'get',
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+    .then(res => res.json())
+    .then(
+        (result) => {
+            console.log(result)
+            this.setState({
+              activityTitleToPass: result[0].title,
+              activityID: result[0].id,
+              location: result[0].location,
+            });
+        },
+        (error) => {
+        this.setState({
+          dataFuncRun: true,
+            error
+        });
+        }
+    );
+
+    this.setState({composerVisible: true});
+  }
+
+  allowDrop = (e) => {
+      e.preventDefault();
+  }
+
+  handleComposerOk = (ev) => {
+    ev.preventDefault();
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
+
+    //console.log(activityItemData)
+    //console.log(this.state.from)
+
+    // Validate Form
+    if(activityItemData.from != null && activityItemData.to != null){
+        if(activityItemData.location.length > 0){
+            // Form valid
+
+            // FETCH NEEDED
+
+            // from
+            // to
+            // location
+            // userID
+            // activityID
+
+
+            data = activityItemData.from;
+            dateClicked = this.state.activityDate;
+            hours = data.split(':')[0];
+            mins = data.split(':')[1];
+            const fromInt = dateClicked.setHours(hours, mins);
+            const fromDate = new Date(fromInt)
+            console.log(fromDate)
+
+            activityItemData.from = fromDate;
+
+            var data = activityItemData.to;
+            var dateClicked = this.state.activityDate;
+            var hours = data.split(':')[0];
+            var mins = data.split(':')[1];
+            const toInt = dateClicked.setHours(hours, mins);
+            const toDate = new Date(toInt)
+            console.log(toDate)
+
+            activityItemData.to = toDate;
+
+
+            console.log(activityItemData)
+            
+            fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
+              method: 'post',
+              body: JSON.stringify(activityItemData),
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
+          }).then(response => {
+              console.log(response.status);
+              if (response.status === 200)
+              window.location.reload();
+          });
+            
+            this.setState({composerVisible: false});
+        }
+    }
+  }
+
+  handleComposerCancel = (ev) => {
+    console.log("test")
+    console.log(ev);
+    this.setState({composerVisible: false});
+    console.log(this.state.composerVisible);
+  }
+
+  handleFromChange = (ev) => {
+    console.log("inside from")
+    const timeWSeconds = ev._d.toTimeString().split(' ')[0];
+    console.log(timeWSeconds)
+    var activityFromDate = this.state.activityDate;
+    const hours = timeWSeconds.split(':')[0];
+    const mins = timeWSeconds.split(':')[1];
+
+    const timeFrom = hours +':'+mins
+    
+    //activityFromDate.setHours(hours, mins);
+    //console.log("FROM: "+activityFromDate)
+
+    this.setState({from: timeFrom});
+    console.log(this.state.from)
+  }
+
+  handleToChange = (ev) => {
+    console.log("inside to")
+    const timeWSeconds = ev._d.toTimeString().split(' ')[0];
+    console.log(timeWSeconds)
+    var activityToDate = this.state.activityDate;
+    const hours = timeWSeconds.split(':')[0];
+    const mins = timeWSeconds.split(':')[1];
+
+    const timeTo = hours +':'+mins
+
+    //activityToDate.setHours(hours, mins);
+    //console.log("TO: "+activityToDate)
+
+    this.setState({to: timeTo});
+    console.log(this.state.to)
+  }
+
+  handleLocationChange = (ev) => {
+    this.setState({location: ev.target.value});
+  }
+
+  getActivityComposerModalContent = () => {
+    const {getFieldDecorator} = this.props.form;
+
+        const formItemLayout = {
+            labelCol: {
+                xs: {span: 24},
+                sm: {span: 8}
+            }, wrapperCol: {
+                xs: {span: 24},
+                sm: {span: 16}
+            }
+        }
+        const format = 'HH:mm';
+
+        return (
+            <div>
+              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                  <Form.Item label="From">
+                      {getFieldDecorator('From', {rules: [{required: true, message: 'You need to specify a start time!'}]})(
+                          <TimePicker format={format} onChange={this.handleFromChange} />
+                      )}
+                  </Form.Item>
+                  <Form.Item label="To">
+                      {getFieldDecorator('To', {rules: [{required: true, message: 'You need to specify an end time!'}]})(
+                          <TimePicker format={format} onChange={this.handleToChange} />
+                      )}
+                  </Form.Item>
+                  <Form.Item label="Location">
+                      {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
+                          <Input placeholder="Location" onChange={this.handleLocationChange} />
+                      )}
+                  </Form.Item>
+              </Form>
+            </div>
+        );
+  }
+
   render() {
     const { value, selectedValue } = this.state;
     return (
-      <div>
-        
+      <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
+
+        <Modal title="Add Activity"
+          visible={this.state.composerVisible}
+          onOk={this.handleComposerOk}
+          onCancel={this.handleComposerCancel}>
+        {this.getActivityComposerModalContent()}
+        </Modal>
+
         <Modal title={this.state.modalTitle}
-              visible={this.state.visible}
+              visible={this.state.calendarModalVisible}
               okText='Close'
               onOk={this.handleOk}
               onCancel={this.handleCancel}>
@@ -202,4 +406,9 @@ class CalendarClass extends React.Component {
   }
 }
 
-export default CalendarClass
+export default CalendarClass;
+
+CalendarClass.propTypes = {
+  id: PropTypes.string,
+  children: PropTypes.node,
+}
