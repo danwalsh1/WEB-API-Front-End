@@ -197,10 +197,6 @@ class CalendarClass extends React.Component {
     const dateDroppedString = e.target.parentNode.parentNode.getAttribute("title");
     const dateActivityDropped = new Date(Date.parse(dateDroppedString));
     this.setState({activityDate: dateActivityDropped});
-    
-    console.log("Dropped.");
-    console.log(activityId)
-    console.log("Do something.")
 
     // Fetch an activity.
     const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/'+activityId;
@@ -237,10 +233,10 @@ class CalendarClass extends React.Component {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: "jacob", activityId: this.state.activityID};
+    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
 
-    console.log(activityItemData.to)
-    console.log(activityItemData.from)
+    console.log(activityItemData)
+    //console.log(this.state.from)
 
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
@@ -268,23 +264,37 @@ class CalendarClass extends React.Component {
   }
 
   handleFromChange = (ev) => {
+    console.log("inside from")
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     console.log(timeWSeconds)
-    var activityDate = this.state.activityDate;
+    var activityFromDate = this.state.activityDate;
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    activityDate.setHours(hours, mins);
-    this.setState({from: activityDate});
+
+    const timeFrom = hours +':'+mins
+    
+    //activityFromDate.setHours(hours, mins);
+    //console.log("FROM: "+activityFromDate)
+
+    this.setState({from: timeFrom});
+    console.log(this.state.from)
   }
 
-  handleToChange = (ev) => { 
+  handleToChange = (ev) => {
+    console.log("inside to")
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     console.log(timeWSeconds)
-    var activityDate = this.state.activityDate;
+    var activityToDate = this.state.activityDate;
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    activityDate.setHours(hours, mins);
-    this.setState({to: activityDate});
+
+    const timeTo = hours +':'+mins
+
+    //activityToDate.setHours(hours, mins);
+    //console.log("TO: "+activityToDate)
+
+    this.setState({to: timeTo});
+    console.log(this.state.to)
   }
 
   handleLocationChange = (ev) => {
