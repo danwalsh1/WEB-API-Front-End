@@ -75,11 +75,17 @@ class CalendarClass extends React.Component {
 
   // Gets time from a Date object.
   getTimeFromDate(datetime){
-    const hours = datetime.getHours();
+    var hours = datetime.getHours();
     const minutes = datetime.getMinutes();
     const seconds = datetime.getSeconds();
 
-    const time = hours + ':' + minutes + seconds;
+    if (hours < 10)
+      hours = '0' + hours
+    var time = hours + ':' + minutes + seconds;
+
+    if (time.length === 6)
+      time = time.slice(0, time.length-1)
+
     return time;
   }
 
