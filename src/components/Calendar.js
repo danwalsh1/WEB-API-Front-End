@@ -1,11 +1,9 @@
 import React from 'react';
-import { Calendar, Alert, Modal, Badge } from 'antd';
+import { Calendar, Alert, Modal, Badge, Form, Input,TimePicker } from 'antd';
 import moment from 'moment';
 import '../App.css';
 import PropTypes from 'prop-types';
 import CalendarItemComposer from './CalendarItemComposer';
-import {Form} from 'antd'
-//import Droppable from '../Dnd/Droppable';
 
 class CalendarClass extends React.Component {
   state = {
@@ -22,7 +20,9 @@ class CalendarClass extends React.Component {
     dataFuncRun: false,
     composerVisible: false,
     activityDate: null,
-    activityLocation: null,
+    from: null,
+    to: null,
+    location: null,
     activityTitleToPass: null,
     activityID: null,
   };
@@ -214,7 +214,7 @@ class CalendarClass extends React.Component {
             this.setState({
               activityTitleToPass: result[0].title,
               activityID: result[0].id,
-              activityLocation: result[0].location,
+              location: result[0].location,
             });
         },
         (error) => {
@@ -225,21 +225,120 @@ class CalendarClass extends React.Component {
         }
     );
 
-    this.setState({composerVisible: true})
+    this.setState({composerVisible: true});
   }
 
   allowDrop = (e) => {
       e.preventDefault();
   }
 
+  handleComposerOk = (ev) => {
+    ev.preventDefault();
+
+    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: "jacob", activityId: this.state.activityID};
+
+    console.log(activityItemData.to)
+    console.log(activityItemData.from)
+
+    // Validate Form
+    if(activityItemData.from != null && activityItemData.to != null){
+        if(activityItemData.location.length > 0){
+            // Form valid
+
+            // FETCH NEEDED
+
+            // from
+            // to
+            // location
+            // userID
+            // activityID
+            
+            this.setState({composerVisible: false});
+        }
+    }
+  }
+
+  handleComposerCancel = (ev) => {
+    console.log("test")
+    console.log(ev);
+    this.setState({composerVisible: false});
+    console.log(this.state.composerVisible);
+  }
+
+  handleFromChange = (ev) => {
+    const timeWSeconds = ev._d.toTimeString().split(' ')[0];
+    console.log(timeWSeconds)
+    var activityDate = this.state.activityDate;
+    const hours = timeWSeconds.split(':')[0];
+    const mins = timeWSeconds.split(':')[1];
+    activityDate.setHours(hours, mins);
+    this.setState({from: activityDate});
+  }
+
+  handleToChange = (ev) => { 
+    const timeWSeconds = ev._d.toTimeString().split(' ')[0];
+    console.log(timeWSeconds)
+    var activityDate = this.state.activityDate;
+    const hours = timeWSeconds.split(':')[0];
+    const mins = timeWSeconds.split(':')[1];
+    activityDate.setHours(hours, mins);
+    this.setState({to: activityDate});
+  }
+
+  handleLocationChange = (ev) => {
+    this.setState({location: ev.target.value});
+  }
+
+  getActivityComposerModalContent = () => {
+    const {getFieldDecorator} = this.props.form;
+
+        const formItemLayout = {
+            labelCol: {
+                xs: {span: 24},
+                sm: {span: 8}
+            }, wrapperCol: {
+                xs: {span: 24},
+                sm: {span: 16}
+            }
+        }
+        const format = 'HH:mm';
+
+        return (
+            <div>
+              <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                  <Form.Item label="From">
+                      {getFieldDecorator('From', {rules: [{required: true, message: 'You need to specify a start time!'}]})(
+                          <TimePicker format={format} onChange={this.handleFromChange} />
+                      )}
+                  </Form.Item>
+                  <Form.Item label="To">
+                      {getFieldDecorator('To', {rules: [{required: true, message: 'You need to specify an end time!'}]})(
+                          <TimePicker format={format} onChange={this.handleToChange} />
+                      )}
+                  </Form.Item>
+                  <Form.Item label="Location">
+                      {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
+                          <Input placeholder="Location" onChange={this.handleLocationChange} />
+                      )}
+                  </Form.Item>
+              </Form>
+            </div>
+        );
+  }
 
   render() {
     const { value, selectedValue } = this.state;
-    const ActivityItemComposer = Form.create({name: 'login'})(CalendarItemComposer)
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
 
-        <ActivityItemComposer title={this.state.activityTitleToPass} visible={this.state.composerVisible} location={this.state.activityLocation} activityID={this.state.activityID} date={this.state.activityDate}/>
+        <Modal title="Add Activity"
+          visible={this.state.composerVisible}
+          onOk={this.handleComposerOk}
+          onCancel={this.handleComposerCancel}>
+        {this.getActivityComposerModalContent()}
+        </Modal>
 
         <Modal title={this.state.modalTitle}
               visible={this.state.calendarModalVisible}
