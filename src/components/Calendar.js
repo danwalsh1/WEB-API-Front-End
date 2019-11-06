@@ -3,7 +3,6 @@ import { Calendar, Alert, Modal, Badge, Form, Input,TimePicker } from 'antd';
 import moment from 'moment';
 import '../App.css';
 import PropTypes from 'prop-types';
-import CalendarItemComposer from './CalendarItemComposer';
 
 class CalendarClass extends React.Component {
   state = {
@@ -247,39 +246,24 @@ class CalendarClass extends React.Component {
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
         if(activityItemData.location.length > 0){
-            // Form valid
 
-            // FETCH NEEDED
-
-            // from
-            // to
-            // location
-            // userID
-            // activityID
-
-
-            data = activityItemData.from;
-            dateClicked = this.state.activityDate;
-            hours = data.split(':')[0];
-            mins = data.split(':')[1];
-            const fromInt = dateClicked.setHours(hours, mins);
-            const fromDate = new Date(fromInt)
-            console.log(fromDate)
-
-            activityItemData.from = fromDate;
-
-            var data = activityItemData.to;
+            var data = activityItemData.from;
             var dateClicked = this.state.activityDate;
             var hours = data.split(':')[0];
             var mins = data.split(':')[1];
+            const fromInt = dateClicked.setHours(hours, mins);
+            const fromDate = new Date(fromInt)
+
+            activityItemData.from = fromDate;
+
+            data = activityItemData.to;
+            dateClicked = this.state.activityDate;
+            hours = data.split(':')[0];
+            mins = data.split(':')[1];
             const toInt = dateClicked.setHours(hours, mins);
             const toDate = new Date(toInt)
-            console.log(toDate)
 
             activityItemData.to = toDate;
-
-
-            console.log(activityItemData)
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -304,37 +288,21 @@ class CalendarClass extends React.Component {
   }
 
   handleFromChange = (ev) => {
-    console.log("inside from")
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
-    console.log(timeWSeconds)
-    var activityFromDate = this.state.activityDate;
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-
     const timeFrom = hours +':'+mins
-    
-    //activityFromDate.setHours(hours, mins);
-    //console.log("FROM: "+activityFromDate)
 
     this.setState({from: timeFrom});
-    console.log(this.state.from)
   }
 
   handleToChange = (ev) => {
-    console.log("inside to")
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
-    console.log(timeWSeconds)
-    var activityToDate = this.state.activityDate;
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-
     const timeTo = hours +':'+mins
 
-    //activityToDate.setHours(hours, mins);
-    //console.log("TO: "+activityToDate)
-
     this.setState({to: timeTo});
-    console.log(this.state.to)
   }
 
   handleLocationChange = (ev) => {
