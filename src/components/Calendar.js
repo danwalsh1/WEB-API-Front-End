@@ -235,7 +235,7 @@ class CalendarClass extends React.Component {
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
 
-    console.log(activityItemData)
+    //console.log(activityItemData)
     //console.log(this.state.from)
 
     // Validate Form
@@ -250,6 +250,38 @@ class CalendarClass extends React.Component {
             // location
             // userID
             // activityID
+
+
+            data = activityItemData.from;
+            dateClicked = this.state.activityDate;
+            hours = data.split(':')[0];
+            mins = data.split(':')[1];
+            const fromInt = dateClicked.setHours(hours, mins);
+            const fromDate = new Date(fromInt)
+            console.log(fromDate)
+
+            activityItemData.from = fromDate;
+
+            var data = activityItemData.to;
+            var dateClicked = this.state.activityDate;
+            var hours = data.split(':')[0];
+            var mins = data.split(':')[1];
+            const toInt = dateClicked.setHours(hours, mins);
+            const toDate = new Date(toInt)
+            console.log(toDate)
+
+            activityItemData.to = toDate;
+
+
+            console.log(activityItemData)
+            
+            fetch('http://localhost:3000/api/v1.0/manage-activity/create-item', {
+              method: 'post',
+              body: JSON.stringify(activityItemData),
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
+          }).then(response => {
+              console.log(response.status);
+          });
             
             this.setState({composerVisible: false});
         }
