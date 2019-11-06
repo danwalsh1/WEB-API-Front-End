@@ -275,12 +275,14 @@ class CalendarClass extends React.Component {
 
             console.log(activityItemData)
             
-            fetch('http://localhost:3000/api/v1.0/manage-activity/create-item', {
+            fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
               body: JSON.stringify(activityItemData),
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
           }).then(response => {
               console.log(response.status);
+              if (response.status === 200)
+              window.location.reload();
           });
             
             this.setState({composerVisible: false});
