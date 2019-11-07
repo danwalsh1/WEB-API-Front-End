@@ -183,7 +183,7 @@ class CalendarClass extends React.Component {
     return (
       <ul className="events">
       {dateActivities.map(item => (
-        <li key={item.title}>
+        <li key={item.key}>
           <h1>{item.title}</h1>
           <p>{item.description}</p>
           <p>Time: {item.timeFROM} - {item.timeTO}</p>

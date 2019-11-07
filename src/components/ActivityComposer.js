@@ -32,7 +32,9 @@ class ActivityComposer extends React.Component{
     handleOk(ev){
         ev.preventDefault();
 
-        const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location};
+        const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location, userId: localStorage.getItem('userId')};
+
+        console.log(activityData)
 
         // Validate form
         if(activityData.title.length > 0){
@@ -47,6 +49,7 @@ class ActivityComposer extends React.Component{
             console.log(JSON.stringify(activityData));
             
             this.setState({visible: false});
+            window.location.reload();
         }
     }
 

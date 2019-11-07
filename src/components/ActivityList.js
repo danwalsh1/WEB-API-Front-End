@@ -13,7 +13,7 @@ class ActivityList extends React.Component{
   };
 
   getActivities = () => {
-    if (!this.state.dataFuncRun){
+    if (!this.state.dataFuncRun && localStorage.getItem('userID') != "null"){
       // Fetches all activity data from the backend, using the logged in user's ID.
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/';
       fetch(URLToFetchFrom, {

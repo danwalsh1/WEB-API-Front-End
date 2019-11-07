@@ -40,12 +40,11 @@ class Login extends React.Component{
                 console.log(response.status);
                 fetch(urlToFetch, {
                     method: 'get',
-                    headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},
-                }).then(res => res.json())
+                    headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword')}
+                }).then(res => console.log(res))
                 .then((result) => {
                     if(response.status === 200){
-                        window.userID = result;
-                        localStorage.setItem('userID', window.userID)
+                        localStorage.setItem('userID', result)
                         window.location.reload();
                         console.log(result)
                     }
