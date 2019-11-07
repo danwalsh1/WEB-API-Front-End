@@ -168,7 +168,7 @@ class CalendarClass extends React.Component {
     return (
       <ul className="events">
       {dateActivities.map(item => (
-        <li key={item.title}>
+        <li key={item.key}>
           <Badge status={item.type} text={item.title} />
         </li>
       ))}
