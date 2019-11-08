@@ -34,13 +34,15 @@ class ActivityComposer extends React.Component{
 
         const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location, userId: localStorage.getItem('userId')};
 
+        console.log(activityData);
+
         // Validate form
         if(activityData.title.length > 0){
             // Title has been given!
             fetch('http://localhost:8080/api/v1.0/manage-activity/create', {
                 method: 'post',
                 body: JSON.stringify(activityData),
-                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:password')}
+                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword')}
                 //headers: {'Content-Type': 'application/json'}
             }).then(res => console.log(res.status));
             console.log(activityData);
