@@ -47,7 +47,7 @@ class ActivityComposer extends React.Component{
             console.log(JSON.stringify(activityData));
             
             this.setState({visible: false});
-            //window.location.reload();
+            window.location.reload();
         }
     }
 

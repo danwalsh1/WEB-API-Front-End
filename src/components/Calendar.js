@@ -27,29 +27,31 @@ class CalendarClass extends React.Component {
   };
 
   componentDidMount(){
-    // Fetches all activity data from the backend, using the logged in user's ID.
-    let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
-    fetch(URLToFetchFrom, {
-      method: 'get',
-      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
-    .then(res => res.json())
-    .then(
-        (result) => {
-            const activityCount = result.length / 2
-            console.log(result)
-            this.setState({
-              dataFuncRun: true,
-              dataFromDB: result,
-              activityCount: activityCount
+    if (localStorage.getItem('userId') != 0){
+      // Fetches all activity data from the backend, using the logged in user's ID.
+      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
+      fetch(URLToFetchFrom, {
+        method: 'get',
+        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+      .then(res => res.json())
+      .then(
+          (result) => {
+              const activityCount = result.length / 2
+              console.log(result)
+              this.setState({
+                dataFuncRun: true,
+                dataFromDB: result,
+                activityCount: activityCount
+            });
+          },
+          (error) => {
+          this.setState({
+            dataFuncRun: true,
+              error
           });
-        },
-        (error) => {
-        this.setState({
-          dataFuncRun: true,
-            error
-        });
-        }
-    );
+          }
+      );
+    }
   }
 
   // A function that converts a datetime from MySQL format to a format JavaScript can use.
@@ -338,7 +340,7 @@ class CalendarClass extends React.Component {
                   </Form.Item>
                   <Form.Item label="Location">
                       {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
-                          <Input placeholder="Location" onChange={this.handleLocationChange} />
+                          <Input placeholder="Location" onChange={this.handleLocationChange} placeholder={this.state.location} />
                       )}
                   </Form.Item>
               </Form>
