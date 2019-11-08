@@ -64,6 +64,7 @@ class SignUp extends React.Component{
                 }).then(res => console.log(res.status));
                 console.log(signUpData);
                 console.log(JSON.stringify(signUpData));
+                window.alert("Your account has been created!");
                 this.setState({visible: false});
             }
        }
