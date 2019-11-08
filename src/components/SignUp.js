@@ -132,12 +132,19 @@ class SignUp extends React.Component{
                 sm: {span: 16}
             }
         }
+        var button;
+        if(localStorage.getItem('userId') == 0){
+            button = <Button type="primary" onClick={this.showModal} visible="false"
+            >
+              Sign Up
+            </Button>
+        }else {
+            button = null;
+        }
 
         const element = (
-            <div>
-                <Button type="primary" onClick={this.showModal}>
-                    Sign Up
-                </Button>
+            <div className='signup'>
+                {button}
                 <Modal title="Sign Up" visible={this.state.visible} okText="Register" onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <Form.Item label="Username">

@@ -18,8 +18,10 @@ function App() {
   return (
     <div>
       Hello there lol
-      <LoginForm />
-      <SignUpForm />
+      <div className='loginsignup'>
+        <LoginForm />
+        <SignUpForm />
+      </div>
       <ActivityComposerForm />
       <ActivityList />
       <Calendar />
