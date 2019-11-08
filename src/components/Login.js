@@ -46,7 +46,7 @@ class Login extends React.Component{
                     if(response.status === 200){
                         console.log(result);
                         localStorage.setItem("userId", result)
-                        //window.location.reload();
+                        window.location.reload();
 
                         console.log(localStorage.getItem("userId"))
                     }
@@ -80,13 +80,35 @@ class Login extends React.Component{
         this.setState({password: event.target.value});
     }
 
+    signOut = () => {
+        /*
+    The following code logs the user out and refreshes the page so any activities are removed.
+    This will be used in future for log out.
+    Set the userid to 0 then reload the page and its contents.
+    */
+
+    localStorage.setItem('userId', 0)
+    window.location.reload();
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
-        return (
-          <div>
-            <Button type="primary" onClick={this.showModal}>
+        var button;
+        if(localStorage.getItem('userId') == 0){
+            button = <Button type="primary" onClick={this.showModal} visible="false"
+            >
               Login here
             </Button>
+        }else if (localStorage.getItem('userId') != 0){
+            button = <Button type="primary" onClick={this.signOut} visible="false"
+            >
+              Sign out
+            </Button>
+        }
+
+        return (
+          <div className='login'>
+            {button}
             <Modal
               title="Login"
               visible={this.state.visible}

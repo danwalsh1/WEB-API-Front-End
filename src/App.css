@@ -16,3 +16,17 @@
     padding: 20px;
     width: 80%;
 }
+
+.loginsignup {
+    float: right;
+    padding: 20px;
+}
+
+.login {
+    float: left;
+    padding-right: 10px;
+}
+
+.signup {
+    float: left;
+}
