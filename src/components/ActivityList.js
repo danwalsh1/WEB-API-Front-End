@@ -1,9 +1,10 @@
 import React from 'react'
-import { List } from 'antd';
+import { List, Form } from 'antd';
 //import { DragDropContext } from 'react-beautiful-dnd';
 import { Card } from 'antd';
 import '../App.css';
 import PropTypes from 'prop-types';
+import ActivityComposer from './ActivityComposer';
 
 class ActivityList extends React.Component{
   state = {
@@ -60,22 +61,28 @@ class ActivityList extends React.Component{
 
 render() {
   //let data = this.getActivityData()
+  const ActivityComposerForm = Form.create({name: 'ActivityComposer'})(ActivityComposer);
   return (
     <div className='activityList'>
-      <h3 style={{ margin: '16px 0' }}>Your Activities</h3>
-      <List
-        size="large"
-        dataSource={this.getActivityData()}
-        renderItem={item =>
-            <Card title={item.title} bordered={true} id={item.id} draggable="true" onDragStart={this.drag} onDragOver={this.noAllowDrop} >
-              {item.description}
-              <br />
-              {item.url}
-              <br />
-              {item.location}
-              <br />
-            </Card>}
-      />
+      <h3 style={{ margin: '16px 0' }}>Your Activities
+        <div style={{float: 'right' }}>
+          <ActivityComposerForm />
+        </div>
+      </h3>
+
+        <List
+          size="large"
+          dataSource={this.getActivityData()}
+          renderItem={item =>
+              <Card title={item.title} bordered={true} id={item.id} draggable="true" onDragStart={this.drag} onDragOver={this.noAllowDrop} >
+                {item.description}
+                <br />
+                {item.url}
+                <br />
+                {item.location}
+                <br />
+              </Card>}
+        />
     </div>
   );
 }
