@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Alert, Modal, Badge, Form, Input,TimePicker } from 'antd';
+import { Calendar, Alert, Modal, Badge, Form, Input, TimePicker } from 'antd';
 import moment from 'moment';
 import '../App.css';
 import PropTypes from 'prop-types';
@@ -24,6 +24,7 @@ class CalendarClass extends React.Component {
     location: null,
     activityTitleToPass: null,
     activityID: null,
+    taggedUsers: null,
   };
 
   componentDidMount(){
@@ -241,9 +242,7 @@ class CalendarClass extends React.Component {
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
-
-    //console.log(activityItemData)
-    //console.log(this.state.from)
+    const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
 
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
@@ -257,6 +256,7 @@ class CalendarClass extends React.Component {
             const fromDate = new Date(fromInt)
 
             activityItemData.from = fromDate;
+            activityTagUserData.actFrom = fromDate;
 
             data = activityItemData.to;
             dateClicked = this.state.activityDate;
@@ -275,6 +275,20 @@ class CalendarClass extends React.Component {
               console.log(response.status);
               if (response.status === 200)
               window.location.reload();
+
+              if(this.state.taggedUsers.length > 0){
+                let taggedUsers = this.state.taggedUsers;
+                let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
+                activityTagUserData.taggedUsers = arrOfTaggedUsers;
+                
+                fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
+                  method: 'post',
+                  body: JSON.stringify(activityTagUserData),
+                  headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+              }).then(response => {
+                  console.log(response.status);
+              });
+              }
           });
             
             this.setState({composerVisible: false});
@@ -311,6 +325,11 @@ class CalendarClass extends React.Component {
     this.setState({location: ev.target.value});
   }
 
+  handleTaggedUsersChange = (ev) => {
+    this.setState({taggedUsers: ev.target.value});
+  }
+
+  // Handles the content that needs to be inside the calendar_activity_item composer modal.
   getActivityComposerModalContent = () => {
     const {getFieldDecorator} = this.props.form;
 
@@ -341,6 +360,11 @@ class CalendarClass extends React.Component {
                   <Form.Item label="Location">
                       {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
                           <Input placeholder="Location" onChange={this.handleLocationChange} placeholder={this.state.location} />
+                      )}
+                  </Form.Item>
+                  <Form.Item label="Tagged Users">
+                      {getFieldDecorator('TaggedUsers')(
+                          <Input placeholder="Tagged Users" onChange={this.handleTaggedUsersChange} />
                       )}
                   </Form.Item>
               </Form>
