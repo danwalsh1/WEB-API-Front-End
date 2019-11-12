@@ -35,7 +35,7 @@ class Login extends React.Component{
             fetch(urlToFetch, {
                 method: 'post',
                 body: JSON.stringify(loginData),
-                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('ja:pass')},
+                headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(loginData.username+':'+loginData.password)},
             }).then(response => {
                 console.log(response.status);
                 fetch(urlToFetch, {
@@ -46,6 +46,9 @@ class Login extends React.Component{
                     if(response.status === 200){
                         console.log(result);
                         localStorage.setItem("userId", result)
+                        localStorage.setItem("username",loginData.username)
+                        localStorage.setItem("password", loginData.password)
+                        
                         window.location.reload();
 
                         console.log(localStorage.getItem("userId"))

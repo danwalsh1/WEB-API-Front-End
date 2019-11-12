@@ -32,7 +32,7 @@ class CalendarClass extends React.Component {
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
       fetch(URLToFetchFrom, {
         method: 'get',
-        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
       .then(res => res.json())
       .then(
           (result) => {
@@ -209,7 +209,7 @@ class CalendarClass extends React.Component {
     const URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/'+activityId;
     fetch(URLToFetchFrom, {
       method: 'get',
-      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+      headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
     .then(res => res.json())
     .then(
         (result) => {
@@ -270,7 +270,7 @@ class CalendarClass extends React.Component {
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
               body: JSON.stringify(activityItemData),
-              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword')},
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
               if (response.status === 200)
