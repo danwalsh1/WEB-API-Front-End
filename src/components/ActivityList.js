@@ -17,10 +17,10 @@ class ActivityList extends React.Component{
     console.log(localStorage.getItem('userId'))
     if (!this.state.dataFuncRun && localStorage.getItem('userId') != 0){
       // Fetches all activity data from the backend, using the logged in user's ID.
-      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivityByItsID/';
+      let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/single/'+localStorage.getItem("userId");
       fetch(URLToFetchFrom, {
         method: 'get',
-        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa('jacob:mypassword123')},})
+        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
       .then(res => res.json())
       .then(
           (result) => {
