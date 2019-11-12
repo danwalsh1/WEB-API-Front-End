@@ -244,12 +244,6 @@ class CalendarClass extends React.Component {
     const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
     const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
 
-    let taggedUsers = this.state.taggedUsers;
-    let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
-    activityTagUserData.taggedUsers = arrOfTaggedUsers;
-
-    console.log(activityItemData)
-
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
         if(activityItemData.location.length > 0){
@@ -282,13 +276,19 @@ class CalendarClass extends React.Component {
               if (response.status === 200)
               window.location.reload();
 
-             fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
-              method: 'post',
-              body: JSON.stringify(activityTagUserData),
-              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
-          }).then(response => {
-              console.log(response.status);
-          });
+              if(this.state.taggedUsers.length > 0){
+                let taggedUsers = this.state.taggedUsers;
+                let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
+                activityTagUserData.taggedUsers = arrOfTaggedUsers;
+                
+                fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
+                  method: 'post',
+                  body: JSON.stringify(activityTagUserData),
+                  headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+              }).then(response => {
+                  console.log(response.status);
+              });
+              }
           });
             
             this.setState({composerVisible: false});
