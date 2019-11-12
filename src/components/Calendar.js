@@ -241,10 +241,12 @@ class CalendarClass extends React.Component {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID, taggedUsers: this.state.taggedUsers};
+    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
+    const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
 
-    let arrOfTaggedUsers = activityItemData.taggedUsers.split(/[ ,]+/);
-    activityItemData.taggedUsers = arrOfTaggedUsers;
+    let taggedUsers = this.state.taggedUsers;
+    let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
+    activityTagUserData.taggedUsers = arrOfTaggedUsers;
 
     console.log(activityItemData)
 
@@ -260,6 +262,7 @@ class CalendarClass extends React.Component {
             const fromDate = new Date(fromInt)
 
             activityItemData.from = fromDate;
+            activityTagUserData.actFrom = fromDate;
 
             data = activityItemData.to;
             dateClicked = this.state.activityDate;
@@ -276,10 +279,16 @@ class CalendarClass extends React.Component {
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
-              /*
               if (response.status === 200)
               window.location.reload();
-              */
+
+             fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
+              method: 'post',
+              body: JSON.stringify(activityTagUserData),
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+          }).then(response => {
+              console.log(response.status);
+          });
           });
             
             this.setState({composerVisible: false});
