@@ -49,12 +49,34 @@ class TagRequestManager extends React.Component{
         }
       }
       
-    formatTagDisplay(){
+    async formatTagDisplay(){
         console.log("Formatting");
         if(this.state.tagData === null || this.state.tagRequestAlert === false){
             console.log("No tag requests to display");
         }else{
-            this.state.tagDisplay = this.state.tagData;
+            let aData = this.state.tagData;
+
+            for(let x = 0; x < aData.length; x++){
+                // Get activity title for each tag request
+                let fetchURL = 'http://localhost:8080/api/v1.0/GetActivityByItsID/' + aData[x].calendarItemID;
+                let result = await fetch(fetchURL, {
+                    method: 'get',
+                    headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        if(result.length > 0){
+                            return result;
+                        }else{
+                            return null;
+                        }
+                    }
+                );
+                aData[x].title = result[0].title;
+                // Get username for each tag request
+            }
+
+            this.setState({tagDisplay: aData});
         }
     }
 
@@ -148,7 +170,7 @@ class TagRequestManager extends React.Component{
                 <Modal title="Activity Tag Requests" visible={this.state.visible} okText="Confirm" onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <List dataSource={this.state.tagDisplay} renderItem={item =>
-                            <Card title={item.calendarItemID} style={{ paddingBottom: '20px' }} >
+                            <Card title={item.title} style={{ paddingBottom: '20px' }} >
                                 Tagged By: {item.taggedByUserID}
                                 <br />
                                 <Radio.Group onChange={this.handleRadioChange}>
