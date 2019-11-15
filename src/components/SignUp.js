@@ -134,7 +134,7 @@ class SignUp extends React.Component{
             }
         }
         var button;
-        if(localStorage.getItem('userId') == 0){
+        if(localStorage.getItem('userId') == 0 || localStorage.getItem('userId') == null){
             button = <Button type="primary" onClick={this.showModal} visible="false"
             >
               Sign Up
