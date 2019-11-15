@@ -108,6 +108,12 @@ class TagRequestManager extends React.Component{
                     }).then(res => console.log(res.status));
                 }else{
                     // Delete the tag request
+                    let sqlData = {id: sqlId};
+                    await fetch('http://localhost:8080/api/v1.0/delete-tag/delete', {
+                        method: 'delete',
+                        body: JSON.stringify(sqlData),
+                        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))}
+                    }).then(res => console.log(res.status));
                 }
             }
 
