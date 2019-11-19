@@ -57,6 +57,18 @@ class CommentUI extends React.Component{
                 }
             );
         }
+        this.formatComments();
+    }
+
+    formatComments(){
+        if(this.state.commentData.length < 1){
+            // If no comments, don't proceed to format them.
+            return;
+        }
+
+        let newData = this.state.commentData;
+
+        this.setState({commentData: newData});
     }
 
     /* Component Functions - End */
@@ -102,7 +114,7 @@ class CommentUI extends React.Component{
             <div>
                 <List className="comment-list" header={`${commentData.length} comments`} itemLayout="horizontal" dataSource={commentData} renderItem={item => (
                     <li>
-                        <Comment author={item.userId} content={item.allText} />
+                        <Comment author={item.username} content={item.allText} />
                     </li>
                 )}/>
                 <Editor onChange={this.handleChange} onSubmit={this.handleSubmit} submitting={submitting} value={newComment} />
