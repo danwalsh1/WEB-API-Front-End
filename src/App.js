@@ -7,6 +7,7 @@ import SignUp from './components/SignUp';
 import CalendarClass from './components/Calendar';
 import ActivityList from './components/ActivityList';
 import TagRequestManager from './components/TagRequestManager';
+import CommentUI from './components/CommentUI';
 
 const LoginForm = Form.create({name: 'login'})(Login)
 const SignUpForm = Form.create({name: 'signup'})(SignUp);
@@ -18,6 +19,7 @@ function App() {
   return (
     <div>
       <TagRequestForm />
+      <CommentUI itemId='1' />
       <div className='loginsignup'>
         <LoginForm />
         <SignUpForm />
