@@ -72,7 +72,9 @@ class TagRequestManager extends React.Component{
                         }
                     }
                 );
-                aData[x].title = result[0].title;
+                if(result != null){
+                    aData[x].title = result[0].title;
+                }
                 // Get username for each tag request
             }
 
