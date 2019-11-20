@@ -270,6 +270,10 @@ class CalendarClass extends React.Component {
             const toDate = new Date(toInt)
 
             activityItemData.to = toDate;
+
+            const formData = new FormData();
+            formData.append("file", this.state.uploadedFile);
+            formData.append("actFrom", JSON.stringify(activityItemData.from));
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -277,9 +281,6 @@ class CalendarClass extends React.Component {
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
-              
-              const formData = new FormData();
-              formData.append("file", this.state.uploadedFile);
 
               if (response.status === 200)
               fetch('http://localhost:8080/api/v1.0/manage-activity/upload-image', {
