@@ -3,6 +3,7 @@ import { Calendar, Alert, Modal, Badge, Form, Input, TimePicker } from 'antd';
 import moment from 'moment';
 import '../App.css';
 import PropTypes from 'prop-types';
+import CommentUI from './CommentUI';
 
 class CalendarClass extends React.Component {
   state = {
@@ -108,7 +109,7 @@ class CalendarClass extends React.Component {
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i];
-      //var id = dataToUse.id;
+      var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
       var location = dataToUse.location;
@@ -135,7 +136,7 @@ class CalendarClass extends React.Component {
       const timeTO = this.getTimeFromDate(dateTO);
 
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
+        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
       };
     }
     
@@ -192,6 +193,7 @@ class CalendarClass extends React.Component {
           <p>Time: {item.timeFROM} - {item.timeTO}</p>
           <p>Location: {item.location}</p>
           <p>URL: {item.url}</p>
+          <CommentUI itemId={item.id} />
           <h2>-------------------------------</h2>
         </li>
       ))}

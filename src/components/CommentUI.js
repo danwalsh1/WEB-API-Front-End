@@ -19,6 +19,7 @@ const Editor = ({onChange, onSubmit, submitting, value}) => (
 class CommentUI extends React.Component{
     constructor(props){
         super(props);
+
         this.state = {
             visible: false,
             commentData: [],
