@@ -244,8 +244,9 @@ class CalendarClass extends React.Component {
 
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID, fileData: this.state.uploadedFile};
+    const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
     const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
+    const file = this.state.uploadedFile;
 
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
@@ -270,7 +271,10 @@ class CalendarClass extends React.Component {
 
             activityItemData.to = toDate;
 
-            console.log(JSON.stringify(activityItemData))
+            console.log(activityItemData)
+            
+            const formData = new FormData();
+            formData.append('file', this.state.uploadedFile);
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -278,7 +282,14 @@ class CalendarClass extends React.Component {
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
+              
               if (response.status === 200)
+              fetch('http://localhost:8080/api/v1.0/manage-activity/upload-image', {
+              method: 'post',
+              body: formData,
+              headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+          }).then(response => {
+              console.log(response.status);
               //window.location.reload();
               if (this.state.taggedUsers != null){
                 if(this.state.taggedUsers.length > 0){
@@ -295,6 +306,7 @@ class CalendarClass extends React.Component {
                 });
                 }
               }
+            })
           });
             
             this.setState({composerVisible: false});
@@ -313,8 +325,7 @@ class CalendarClass extends React.Component {
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    const timeFrom = hours +':'+mins
-
+    const timeFrom = hours + ':' + mins;
     this.setState({from: timeFrom});
   }
 
@@ -322,8 +333,7 @@ class CalendarClass extends React.Component {
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    const timeTo = hours +':'+mins
-
+    const timeTo = hours + ':' + mins;
     this.setState({to: timeTo});
   }
 
