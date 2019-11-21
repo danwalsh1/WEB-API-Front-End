@@ -137,7 +137,7 @@ class CalendarClass extends React.Component {
       const timeTO = this.getTimeFromDate(dateTO);
 
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
+        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString});
       };
     }
     
@@ -185,6 +185,44 @@ class CalendarClass extends React.Component {
     const val = this.state.value
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(val);
+    var i = 0;
+    var info;
+    for(i = 0; i < dateActivities.length; i++){
+      const dateFrom = dateActivities[i].dateFrom;
+      const timeFrom = dateActivities[i].timeFROM;
+      console.log(dateActivities[i].dateFrom)
+      console.log(dateActivities[i].timeFROM)
+
+      const dataToPost = dateFrom+' '+timeFrom+':00';
+      console.log(dataToPost);
+
+      /*
+      info = dateActivities[i].dateFrom;
+      info = info.replace('T', ' ');
+      info = info.replace('Z', '');
+      info = info.slice(0 , info.length-5);
+      info = info.slice(1 , info.length);
+      */
+
+
+      fetch('http://localhost:8080/api/v1.0/manage-activity/get-uploaded-image', {
+        method: 'post',
+        body: JSON.stringify({data: dataToPost}),
+        headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+    }).then(res => res.json())
+    .then(
+      (result) => {
+          console.log(result)
+      },
+      (error) => {
+        console.log(error)
+      }
+  )
+    }
+    
+    console.log(dateActivities);
+
+    // get activity picture.
     return (
       <ul className="events">
       {dateActivities.map(item => (
@@ -194,6 +232,7 @@ class CalendarClass extends React.Component {
           <p>Time: {item.timeFROM} - {item.timeTO}</p>
           <p>Location: {item.location}</p>
           <p>URL: {item.url}</p>
+
           <CommentUI itemId={item.id} />
           <h2>-------------------------------</h2>
         </li>
@@ -217,6 +256,7 @@ class CalendarClass extends React.Component {
     .then(res => res.json())
     .then(
         (result) => {
+            console.log("Activity got from dropping:")
             console.log(result)
             this.setState({
               activityTitleToPass: result[0].title,
@@ -289,7 +329,7 @@ class CalendarClass extends React.Component {
               headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
-              //window.location.reload();
+              window.location.reload();
               if (this.state.taggedUsers != null){
                 if(this.state.taggedUsers.length > 0){
                   let taggedUsers = this.state.taggedUsers;
