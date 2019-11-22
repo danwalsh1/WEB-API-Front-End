@@ -209,7 +209,7 @@ class CalendarClass extends React.Component {
         method: 'post',
         body: JSON.stringify({data: dataToPost}),
         headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
-    }).then(res => res.json())
+    }).then(res => console.log(res))
     .then(
       (result) => {
           console.log(result)
