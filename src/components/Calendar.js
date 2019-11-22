@@ -137,7 +137,7 @@ class CalendarClass extends React.Component {
       const timeTO = this.getTimeFromDate(dateTO);
 
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString});
+        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString, urlOfImage: null});
       };
     }
     
@@ -185,16 +185,34 @@ class CalendarClass extends React.Component {
     const val = this.state.value
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(val);
+    var arrayToPost = [];
     var i = 0;
     var info;
     for(i = 0; i < dateActivities.length; i++){
-      const dateFrom = dateActivities[i].dateFrom;
+      console.log("--------------")
+      console.log(i)
+      var dateFrom = dateActivities[i].dateFrom;
       const timeFrom = dateActivities[i].timeFROM;
-      console.log(dateActivities[i].dateFrom)
-      console.log(dateActivities[i].timeFROM)
+      console.log(dateFrom)
+      console.log(timeFrom)
+      
+      const dateFromSplit = dateFrom.split('-')
 
-      const dataToPost = dateFrom+' '+timeFrom+':00';
-      console.log(dataToPost);
+      var b = dateFromSplit[0];
+      dateFromSplit[0] = dateFromSplit[2];
+      dateFromSplit[2] = b;
+      console.log(dateFromSplit)
+
+      dateFrom = dateFromSplit[0]+'-'+dateFromSplit[1]+'-'+dateFromSplit[2];
+
+      var dateTime = dateFrom+'+'+timeFrom+':00';
+      dateTime = dateTime.replace(/:/g, '=')
+      dateTime = dateTime+'.png';
+      //arrayToPost = arrayToPost.concat(dateTime);
+      //console.log(arrayToPost);
+
+      // array to post contains the name of the file to get in an array for each of the acts
+      dateActivities[i].urlOfImage = dateTime;
 
       /*
       info = dateActivities[i].dateFrom;
@@ -204,22 +222,36 @@ class CalendarClass extends React.Component {
       info = info.slice(1 , info.length);
       */
 
+      console.log(dateActivities)
 
-      fetch('http://localhost:8080/api/v1.0/manage-activity/get-uploaded-image', {
+      console.log(i)
+    }
+
+    /*
+    fetch('http://localhost:8080/api/v1.0/manage-activity/get-uploaded-image', {
         method: 'post',
-        body: JSON.stringify({data: dataToPost}),
+        body: JSON.stringify({data: arrayToPost}),
         headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
-    }).then(res => console.log(res))
+    }).then(res => res.json())
     .then(
       (result) => {
-          console.log(result)
+          console.log(dateActivities)
+          console.log(dateActivities.length)
+          console.log(i)
+          console.log(result.dataToSend);
+          for(i = 0; i < result.dataToSend.length; i++){
+            dateActivities[i].urlOfImage = result.dataToSend[i];
+          }
+          //this.setState({imageURLs: result.dataToSend});
+          //dateActivities[i].urlOfImage = result.dataToSend;
       },
       (error) => {
         console.log(error)
       }
-  )
-    }
+    )
+    */
     
+    console.log("----")
     console.log(dateActivities);
 
     // get activity picture.
@@ -232,7 +264,7 @@ class CalendarClass extends React.Component {
           <p>Time: {item.timeFROM} - {item.timeTO}</p>
           <p>Location: {item.location}</p>
           <p>URL: {item.url}</p>
-
+          <img src={'http://localhost:8080/'+item.urlOfImage} style={{width: 425}}></img>
           <CommentUI itemId={item.id} />
           <h2>-------------------------------</h2>
         </li>
