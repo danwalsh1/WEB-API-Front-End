@@ -185,14 +185,12 @@ class CalendarClass extends React.Component {
     const val = this.state.value
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(val);
-    var arrayToPost = [];
     var i = 0;
-    var info;
     for(i = 0; i < dateActivities.length; i++){
       var dateFrom = dateActivities[i].dateFrom;
       const timeFrom = dateActivities[i].timeFROM;
       
-      const dateFromSplit = dateFrom.split('-')
+      const dateFromSplit = dateFrom.split('-');
 
       var b = dateFromSplit[0];
       dateFromSplit[0] = dateFromSplit[2];
@@ -201,7 +199,7 @@ class CalendarClass extends React.Component {
       dateFrom = dateFromSplit[0]+'-'+dateFromSplit[1]+'-'+dateFromSplit[2];
 
       var dateTime = dateFrom+'+'+timeFrom+':00';
-      dateTime = dateTime.replace(/:/g, '=')
+      dateTime = dateTime.replace(/:/g, '=');
       dateTime = dateTime+'.png';
 
       // array to post contains the name of the file to get in an array for each of the acts
