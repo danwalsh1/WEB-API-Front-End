@@ -27,6 +27,7 @@ class CalendarClass extends React.Component {
     activityID: null,
     taggedUsers: null,
     uploadedFile: null,
+    isConflict: null,
   };
 
   componentDidMount(){
@@ -308,6 +309,16 @@ class CalendarClass extends React.Component {
           }).then(response => {
               console.log(response.status);
 
+              // Get the status of overlapping activities.
+              fetch('http://localhost:8080/api/v1.0/manage-activity/get-overlap', {
+                method: 'get',
+                headers: {'Content-Type': 'application/json'},
+              }).then(res => res.json())
+              .then((result) => {
+                console.log(result);
+                this.setState({isConflict: result});
+              })
+
               if (response.status === 200)
               fetch('http://localhost:8080/api/v1.0/manage-activity/upload-image', {
               method: 'post',
@@ -334,28 +345,6 @@ class CalendarClass extends React.Component {
               }
             })
           })
-
-            fetch('http://localhost:8080/api/v1.0/manage-activity/get-overlap', {
-              method: 'get',
-              headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
-            }).then(response => response.json())
-            .then(
-              (result) => {
-                  const activityCount = result.length / 2
-                  console.log(result)
-                  this.setState({
-                    dataFuncRun: true,
-                    dataFromDB: result,
-                    activityCount: activityCount
-                });
-              },
-              (error) => {
-              this.setState({
-                dataFuncRun: true,
-                  error
-              });
-              }
-          );
             
             this.setState({composerVisible: false});
         }
