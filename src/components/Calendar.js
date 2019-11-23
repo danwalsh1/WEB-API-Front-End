@@ -27,6 +27,7 @@ class CalendarClass extends React.Component {
     activityID: null,
     taggedUsers: null,
     uploadedFile: null,
+    isOverlap: localStorage.getItem('isOverlap'),
   };
 
   componentDidMount(){
@@ -298,6 +299,8 @@ class CalendarClass extends React.Component {
             const formData = new FormData();
             formData.append("file", this.state.uploadedFile);
             formData.append("actFrom", JSON.stringify(activityItemData.from));
+
+            console.log(activityItemData);
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -306,6 +309,16 @@ class CalendarClass extends React.Component {
           }).then(response => {
               console.log(response.status);
 
+              // Get the status of overlapping activities.
+              fetch('http://localhost:8080/api/v1.0/manage-activity/get-overlap', {
+                method: 'get',
+                headers: {'Content-Type': 'application/json'},
+              }).then(res => res.json())
+              .then((result) => {
+                console.log(result);
+                localStorage.setItem('isOverlap',result);
+              })
+
               if (response.status === 200)
               fetch('http://localhost:8080/api/v1.0/manage-activity/upload-image', {
               method: 'post',
@@ -313,6 +326,7 @@ class CalendarClass extends React.Component {
               headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
+              // RELOAD THE PAGE.
               window.location.reload();
               if (this.state.taggedUsers != null){
                 if(this.state.taggedUsers.length > 0){
@@ -330,7 +344,7 @@ class CalendarClass extends React.Component {
                 }
               }
             })
-          });
+          })
             
             this.setState({composerVisible: false});
         }
@@ -424,6 +438,17 @@ class CalendarClass extends React.Component {
         );
   }
 
+  getAlertContent = (selectedValue) => {
+    let contentToShow
+    if (localStorage.getItem('isOverlap')){
+      contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
+    }else{
+      contentToShow = <Alert message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`} />
+    }
+
+    return( contentToShow )
+  }
+
   render() {
     const { value, selectedValue } = this.state;
     return (
@@ -443,9 +468,9 @@ class CalendarClass extends React.Component {
               onCancel={this.handleCancel}>
           {this.getModalContent()}
         </Modal>
-        <Alert
-          message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
-        />
+
+        {this.getAlertContent(selectedValue)}
+
         <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
       </div>
     );
