@@ -298,6 +298,8 @@ class CalendarClass extends React.Component {
             const formData = new FormData();
             formData.append("file", this.state.uploadedFile);
             formData.append("actFrom", JSON.stringify(activityItemData.from));
+
+            console.log(activityItemData);
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -313,7 +315,8 @@ class CalendarClass extends React.Component {
               headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
-              window.location.reload();
+              // RELOAD THE PAGE.
+              //window.location.reload();
               if (this.state.taggedUsers != null){
                 if(this.state.taggedUsers.length > 0){
                   let taggedUsers = this.state.taggedUsers;
@@ -330,7 +333,29 @@ class CalendarClass extends React.Component {
                 }
               }
             })
-          });
+          })
+
+            fetch('http://localhost:8080/api/v1.0/manage-activity/get-overlap', {
+              method: 'get',
+              headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+            }).then(response => response.json())
+            .then(
+              (result) => {
+                  const activityCount = result.length / 2
+                  console.log(result)
+                  this.setState({
+                    dataFuncRun: true,
+                    dataFromDB: result,
+                    activityCount: activityCount
+                });
+              },
+              (error) => {
+              this.setState({
+                dataFuncRun: true,
+                  error
+              });
+              }
+          );
             
             this.setState({composerVisible: false});
         }
