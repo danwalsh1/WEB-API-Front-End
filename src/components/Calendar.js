@@ -316,7 +316,7 @@ class CalendarClass extends React.Component {
               }).then(res => res.json())
               .then((result) => {
                 console.log(result);
-                localStorage.setItem('isOverlap',result)
+                localStorage.setItem('isOverlap',result);
               })
 
               if (response.status === 200)
