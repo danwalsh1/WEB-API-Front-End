@@ -27,7 +27,7 @@ class CalendarClass extends React.Component {
     activityID: null,
     taggedUsers: null,
     uploadedFile: null,
-    isConflict: null,
+    isOverlap: localStorage.getItem('isOverlap'),
   };
 
   componentDidMount(){
@@ -316,7 +316,7 @@ class CalendarClass extends React.Component {
               }).then(res => res.json())
               .then((result) => {
                 console.log(result);
-                this.setState({isConflict: result});
+                localStorage.setItem('isOverlap',result)
               })
 
               if (response.status === 200)
@@ -327,7 +327,7 @@ class CalendarClass extends React.Component {
           }).then(response => {
               console.log(response.status);
               // RELOAD THE PAGE.
-              //window.location.reload();
+              window.location.reload();
               if (this.state.taggedUsers != null){
                 if(this.state.taggedUsers.length > 0){
                   let taggedUsers = this.state.taggedUsers;
@@ -438,6 +438,17 @@ class CalendarClass extends React.Component {
         );
   }
 
+  getAlertContent = (selectedValue) => {
+    let contentToShow
+    if (localStorage.getItem('isOverlap')){
+      contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
+    }else{
+      contentToShow = <Alert message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`} />
+    }
+
+    return( contentToShow )
+  }
+
   render() {
     const { value, selectedValue } = this.state;
     return (
@@ -457,9 +468,9 @@ class CalendarClass extends React.Component {
               onCancel={this.handleCancel}>
           {this.getModalContent()}
         </Modal>
-        <Alert
-          message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`}
-        />
+
+        {this.getAlertContent(selectedValue)}
+
         <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
       </div>
     );
