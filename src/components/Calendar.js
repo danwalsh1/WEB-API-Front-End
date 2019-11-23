@@ -26,6 +26,7 @@ class CalendarClass extends React.Component {
     activityTitleToPass: null,
     activityID: null,
     taggedUsers: null,
+    uploadedFile: null,
   };
 
   componentDidMount(){
@@ -136,7 +137,7 @@ class CalendarClass extends React.Component {
       const timeTO = this.getTimeFromDate(dateTO);
 
       if (currentDateToRender === dateString){
-        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url});
+        dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString, urlOfImage: null});
       };
     }
     
@@ -184,6 +185,28 @@ class CalendarClass extends React.Component {
     const val = this.state.value
     if (!this.state.dataFuncRun){return;}
     const dateActivities = this.getActivityData(val);
+    var i = 0;
+    for(i = 0; i < dateActivities.length; i++){
+      var dateFrom = dateActivities[i].dateFrom;
+      const timeFrom = dateActivities[i].timeFROM;
+      
+      const dateFromSplit = dateFrom.split('-');
+
+      var b = dateFromSplit[0];
+      dateFromSplit[0] = dateFromSplit[2];
+      dateFromSplit[2] = b;
+
+      dateFrom = dateFromSplit[0]+'-'+dateFromSplit[1]+'-'+dateFromSplit[2];
+
+      var dateTime = dateFrom+'+'+timeFrom+':00';
+      dateTime = dateTime.replace(/:/g, '=');
+      dateTime = dateTime+'.png';
+
+      // array to post contains the name of the file to get in an array for each of the acts
+      dateActivities[i].urlOfImage = dateTime;
+    }
+
+    // get activity picture.
     return (
       <ul className="events">
       {dateActivities.map(item => (
@@ -193,6 +216,7 @@ class CalendarClass extends React.Component {
           <p>Time: {item.timeFROM} - {item.timeTO}</p>
           <p>Location: {item.location}</p>
           <p>URL: {item.url}</p>
+          <img src={'http://localhost:8080/'+item.urlOfImage} style={{width: 425}}></img>
           <CommentUI itemId={item.id} />
           <h2>-------------------------------</h2>
         </li>
@@ -216,6 +240,7 @@ class CalendarClass extends React.Component {
     .then(res => res.json())
     .then(
         (result) => {
+            console.log("Activity got from dropping:")
             console.log(result)
             this.setState({
               activityTitleToPass: result[0].title,
@@ -245,6 +270,7 @@ class CalendarClass extends React.Component {
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
     const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
+    const file = this.state.uploadedFile;
 
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
@@ -268,6 +294,10 @@ class CalendarClass extends React.Component {
             const toDate = new Date(toInt)
 
             activityItemData.to = toDate;
+
+            const formData = new FormData();
+            formData.append("file", this.state.uploadedFile);
+            formData.append("actFrom", JSON.stringify(activityItemData.from));
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -275,22 +305,31 @@ class CalendarClass extends React.Component {
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
           }).then(response => {
               console.log(response.status);
-              if (response.status === 200)
-              window.location.reload();
 
-              if(this.state.taggedUsers.length > 0){
-                let taggedUsers = this.state.taggedUsers;
-                let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
-                activityTagUserData.taggedUsers = arrOfTaggedUsers;
-                
-                fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
-                  method: 'post',
-                  body: JSON.stringify(activityTagUserData),
-                  headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
-              }).then(response => {
-                  console.log(response.status);
-              });
+              if (response.status === 200)
+              fetch('http://localhost:8080/api/v1.0/manage-activity/upload-image', {
+              method: 'post',
+              body: formData,
+              headers: {'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+          }).then(response => {
+              console.log(response.status);
+              window.location.reload();
+              if (this.state.taggedUsers != null){
+                if(this.state.taggedUsers.length > 0){
+                  let taggedUsers = this.state.taggedUsers;
+                  let arrOfTaggedUsers = taggedUsers.split(/[ ,]+/);
+                  activityTagUserData.taggedUsers = arrOfTaggedUsers;
+                  
+                  fetch('http://localhost:8080/api/v1.0/tag/tagUserInAct', {
+                    method: 'post',
+                    body: JSON.stringify(activityTagUserData),
+                    headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},
+                }).then(response => {
+                    console.log(response.status);
+                });
+                }
               }
+            })
           });
             
             this.setState({composerVisible: false});
@@ -309,8 +348,7 @@ class CalendarClass extends React.Component {
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    const timeFrom = hours +':'+mins
-
+    const timeFrom = hours + ':' + mins;
     this.setState({from: timeFrom});
   }
 
@@ -318,8 +356,7 @@ class CalendarClass extends React.Component {
     const timeWSeconds = ev._d.toTimeString().split(' ')[0];
     const hours = timeWSeconds.split(':')[0];
     const mins = timeWSeconds.split(':')[1];
-    const timeTo = hours +':'+mins
-
+    const timeTo = hours + ':' + mins;
     this.setState({to: timeTo});
   }
 
@@ -329,6 +366,13 @@ class CalendarClass extends React.Component {
 
   handleTaggedUsersChange = (ev) => {
     this.setState({taggedUsers: ev.target.value});
+  }
+
+  onFileChange = (ev) =>{
+    console.log(ev.target.files[0])
+    this.setState({
+      uploadedFile: ev.target.files[0],
+    })
   }
 
   // Handles the content that needs to be inside the calendar_activity_item composer modal.
@@ -369,7 +413,13 @@ class CalendarClass extends React.Component {
                           <Input placeholder="Tagged Users" onChange={this.handleTaggedUsersChange} />
                       )}
                   </Form.Item>
+                  <Form.Item label="Uploaded File">
+                      {getFieldDecorator('UploadFile')(
+                          <Input type="file" onChange={this.onFileChange}/>
+                      )}
+                  </Form.Item>
               </Form>
+              
             </div>
         );
   }
