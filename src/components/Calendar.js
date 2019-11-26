@@ -55,7 +55,17 @@ class CalendarClass extends React.Component {
                     console.log(getActivityResult);
                     console.log(result);
 
-                    getActivityResult = getActivityResult.concat(result);
+                    // Should be in the format - Date
+                    //                         - calendar_activity_item info
+
+                    var i = 0;
+                    for(i = 0; i < result.length; i++){
+                      console.log(i)
+                      getActivityResult.splice(getActivityResult / 2, 0 , result[i]);
+                      console.log(getActivityResult);
+                    }
+
+                    //getActivityResult.splice(getActivityResult / 2, 0 , result[0]);
                     console.log(getActivityResult);
 
                     const activityCount = getActivityResult.length / 2;
@@ -120,12 +130,9 @@ class CalendarClass extends React.Component {
   getActivityData = value => {
     var i;
     var dateActvities = [];
-    console.log(this.state.activityCount)
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i];
-      console.log(dataToUse);
-      console.log(i);
       var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
@@ -155,7 +162,6 @@ class CalendarClass extends React.Component {
       if (currentDateToRender === dateString){
         dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString, urlOfImage: null});
       };
-      console.log(dateActvities)
     }
     
     return dateActvities || [];
