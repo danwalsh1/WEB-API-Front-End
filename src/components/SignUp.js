@@ -1,5 +1,6 @@
 import React from 'react';
 import {Modal, Button, Form, Icon, Input} from 'antd';
+import { exportDefaultSpecifier } from '@babel/types';
 
 /* USAGE:
 *  To use this component you first need to do:
@@ -39,7 +40,7 @@ class SignUp extends React.Component{
         this.setState({visible: true});
     }
 
-    handleOk(ev){
+    async handleOk(ev){
         ev.preventDefault();
         console.log(ev);
         // TODO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -57,14 +58,20 @@ class SignUp extends React.Component{
                     body: JSON.stringify(signUpData),
                     headers: {'Content-Type': 'application/json'}
                 }).then(res => res.json()).then(json => console.log(json));*/
-                fetch('http://localhost:8080/api/v1.0/signup/register', {
+                let resultStatus = await fetch('http://localhost:8080/api/v1.0/signup/register', {
                     method: 'post',
                     body: JSON.stringify(signUpData),
                     headers: {'Content-Type': 'application/json'}
-                }).then(res => console.log(res.status));
-                console.log(signUpData);
-                console.log(JSON.stringify(signUpData));
-                window.alert("Your account has been created!");
+                }).then(res => {return res.status;})
+                if(resultStatus == 200){
+                    window.alert("Your account has been created!");
+                }else if(resultStatus == 409){
+                    window.alert("The username you gave is already in use!");
+                }else{
+                    window.alert("Server error!");
+                }
+                console.log(`Status: ${resultStatus}`);
+                console.log(resultStatus);
                 this.setState({visible: false});
             }
        }
