@@ -472,7 +472,7 @@ class CalendarClass extends React.Component {
 
         {this.getAlertContent(selectedValue)}
 
-        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
+        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} value={moment()}/>
       </div>
     );
   }
