@@ -31,7 +31,7 @@ class CalendarClass extends React.Component {
   };
 
   componentDidMount(){
-    if (localStorage.getItem('userId') != 0){
+    if (localStorage.getItem('userId') != 0 && localStorage.getItem('userId') != null){
       // Fetches all activity data from the backend, using the logged in user's ID.
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
       fetch(URLToFetchFrom, {
@@ -439,8 +439,9 @@ class CalendarClass extends React.Component {
   }
 
   getAlertContent = (selectedValue) => {
-    let contentToShow
-    if (localStorage.getItem('isOverlap')){
+    let contentToShow;
+    console.log(localStorage.getItem('isOverlap'));
+    if (localStorage.getItem('isOverlap') == "true"){
       contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
     }else{
       contentToShow = <Alert message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`} />
