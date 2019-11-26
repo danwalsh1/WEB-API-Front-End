@@ -1,6 +1,5 @@
 import React from 'react';
 import {Modal, Button, Form, Icon, Input} from 'antd';
-import { exportDefaultSpecifier } from '@babel/types';
 
 /* USAGE:
 *  To use this component you first need to do:

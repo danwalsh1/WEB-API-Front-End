@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Button, Form, Icon, List, Card, Radio, Input} from 'antd';
+import {Modal, Button, Form, Icon, List, Card, Radio} from 'antd';
 
 class TagRequestManager extends React.Component{
     constructor(props){
