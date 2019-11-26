@@ -40,19 +40,31 @@ class CalendarClass extends React.Component {
       .then(res => res.json())
       .then(
           (result) => {
-              const activityCount = result.length / 2
-              console.log(result)
-              this.setState({
-                dataFuncRun: true,
-                dataFromDB: result,
-                activityCount: activityCount
-            });
-          },
-          (error) => {
-          this.setState({
-            dataFuncRun: true,
-              error
-          });
+            var getActivityResult = result;
+
+            console.log(getActivityResult);
+
+            // fetch from tagged users thing // http://localhost:8080/api/v1.0/GetTaggedIn/userId
+
+            fetch('http://localhost:8080/api/v1.0/GetTaggedIn/'+this.state.userId, {
+              method: 'get',
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(getActivityResult);
+                    console.log(result);
+
+                    getActivityResult = getActivityResult.concat(result);
+                    console.log(getActivityResult);
+
+                    const activityCount = getActivityResult.length / 2;
+                    this.setState({
+                      dataFuncRun: true,
+                      dataFromDB: getActivityResult,
+                      activityCount: activityCount
+                  });
+                  });
           }
       );
     }
@@ -108,9 +120,12 @@ class CalendarClass extends React.Component {
   getActivityData = value => {
     var i;
     var dateActvities = [];
+    console.log(this.state.activityCount)
     for (i = 0; i < this.state.activityCount; i++){
       // Get info from calendar_activity_item table
       var dataToUse = this.state.dataFromDB[i];
+      console.log(dataToUse);
+      console.log(i);
       var id = dataToUse.id;
       var datetimeFROM = dataToUse.aFrom;
       var datetimeTO = dataToUse.aTo;
@@ -140,6 +155,7 @@ class CalendarClass extends React.Component {
       if (currentDateToRender === dateString){
         dateActvities.push({ key: i, id: id, type: 'success', title: titles, description: description, timeFROM: timeFROM, timeTO: timeTO, location: location, url: url, dateFrom: dateString, urlOfImage: null});
       };
+      console.log(dateActvities)
     }
     
     return dateActvities || [];
