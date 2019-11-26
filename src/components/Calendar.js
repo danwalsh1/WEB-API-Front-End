@@ -42,39 +42,28 @@ class CalendarClass extends React.Component {
           (result) => {
             var getActivityResult = result;
 
-            console.log(getActivityResult);
-
-            // fetch from tagged users thing // http://localhost:8080/api/v1.0/GetTaggedIn/userId
-
             fetch('http://localhost:8080/api/v1.0/GetTaggedIn/'+this.state.userId, {
               method: 'get',
               headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(getActivityResult);
-                    console.log(result);
-
-                    // Should be in the format - Date
-                    //                         - calendar_activity_item info
-
                     var i = 0;
-                    for(i = 0; i < result.length; i++){
-                      console.log(i)
-                      getActivityResult.splice(getActivityResult / 2, 0 , result[i]);
-                      console.log(getActivityResult);
+                    for(i = 0; i < result.length; i=i+2){
+                      getActivityResult.splice(getActivityResult.length / 2 , 0 , result[i]);
                     }
 
-                    //getActivityResult.splice(getActivityResult / 2, 0 , result[0]);
-                    console.log(getActivityResult);
+                    var i = 1;
+                    for(i = 1; i < result.length; i=i+2){
+                      getActivityResult.splice(getActivityResult.length, 0 , result[i]);
+                    }
 
                     const activityCount = getActivityResult.length / 2;
                     this.setState({
                       dataFuncRun: true,
                       dataFromDB: getActivityResult,
                       activityCount: activityCount
-                  });
-                  });
+                  });});
           }
       );
     }
@@ -462,7 +451,6 @@ class CalendarClass extends React.Component {
 
   getAlertContent = (selectedValue) => {
     let contentToShow;
-    console.log(localStorage.getItem('isOverlap'));
     if (localStorage.getItem('isOverlap') == "true"){
       contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
     }else{
