@@ -81,7 +81,7 @@ class CommentUI extends React.Component{
         console.log("Formatting in progress...");
 
         for(let x = 0; x < newData.length; x++){
-            if(newData[x].userId == localStorage.getItem('userId')){
+            if(newData[x].userId === localStorage.getItem('userId')){
                 newData[x].spanCode = [<span key="comment-list-reply-to-0" onClick={() => this.handleEditComment(newData[x].id, newData[x].allText)}>Edit</span>];
             }else{
                 newData[x].spanCode = [];
@@ -149,7 +149,7 @@ class CommentUI extends React.Component{
 
     async handleEditOk(){
         console.log("Starting to edit comment");
-        if(this.state.editComment == ''){
+        if(this.state.editComment === ''){
             console.log("Failed to edit comment!");
             return;
         }

@@ -79,9 +79,9 @@ class SignUp extends React.Component{
                     body: JSON.stringify(signUpData),
                     headers: {'Content-Type': 'application/json'}
                 }).then(res => {return res.status;})
-                if(resultStatus == 200){
+                if(resultStatus === 200){
                     window.alert("Your account has been created!");
-                }else if(resultStatus == 409){
+                }else if(resultStatus === 409){
                     window.alert("The username you gave is already in use!");
                 }else{
                     window.alert("Server error!");
@@ -157,7 +157,7 @@ class SignUp extends React.Component{
             }
         }
         var button;
-        if(localStorage.getItem('userId') == 0 || localStorage.getItem('userId') == null){
+        if(localStorage.getItem('userId') === 0 || localStorage.getItem('userId') === null){
             button = <Button type="primary" onClick={this.showModal} visible="false"
             >
               Sign Up

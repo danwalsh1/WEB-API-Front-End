@@ -97,12 +97,12 @@ class Login extends React.Component{
     render() {
         const { getFieldDecorator } = this.props.form
         var button;
-        if(localStorage.getItem('userId') == 0 || localStorage.getItem('userId') == null) {
+        if(localStorage.getItem('userId') === 0 || localStorage.getItem('userId') === null) {
             button = <Button type="primary" onClick={this.showModal} visible="false"
             >
               Login here
             </Button>
-        }else if (localStorage.getItem('userId') != 0){
+        }else if (localStorage.getItem('userId') !== 0){
             button = <Button type="primary" onClick={this.signOut} visible="false"
             >
               Sign out

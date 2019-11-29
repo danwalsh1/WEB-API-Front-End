@@ -31,7 +31,7 @@ class CalendarClass extends React.Component {
   };
 
   componentDidMount(){
-    if (localStorage.getItem('userId') != 0 && localStorage.getItem('userId') != null){
+    if (localStorage.getItem('userId') !== 0 && localStorage.getItem('userId') !== null){
       // Fetches all activity data from the backend, using the logged in user's ID.
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
       fetch(URLToFetchFrom, {
@@ -53,7 +53,7 @@ class CalendarClass extends React.Component {
                       getActivityResult.splice(getActivityResult.length / 2 , 0 , result[i]);
                     }
 
-                    var i = 1;
+                    i = 1;
                     for(i = 1; i < result.length; i=i+2){
                       getActivityResult.splice(getActivityResult.length, 0 , result[i]);
                     }
@@ -229,7 +229,7 @@ class CalendarClass extends React.Component {
           <p>Time: {item.timeFROM} - {item.timeTO}</p>
           <p>Location: {item.location}</p>
           <p>URL: {item.url}</p>
-          <img src={'http://localhost:8080/'+item.urlOfImage} style={{width: 425}}></img>
+          <img src={'http://localhost:8080/'+item.urlOfImage} alt="Activity pic." style={{width: 425}}></img>
           <CommentUI itemId={item.id} />
           <h2>-------------------------------</h2>
         </li>
@@ -283,7 +283,6 @@ class CalendarClass extends React.Component {
     // Edit below to use proper user ID and use correct dateTime format using date given through props <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     const activityItemData = {from: this.state.from, to: this.state.to, location: this.state.location, userId: this.state.userId, activityId: this.state.activityID};
     const activityTagUserData = {taggedUsers: this.state.taggedUsers, taggedByUserID: this.state.userId, actID: this.state.activityID, actFrom: this.state.from}
-    const file = this.state.uploadedFile;
 
     // Validate Form
     if(activityItemData.from != null && activityItemData.to != null){
@@ -460,7 +459,7 @@ class CalendarClass extends React.Component {
                   </Form.Item>
                   <Form.Item label="Location">
                       {getFieldDecorator('Location', {rules: [{required: true, message: 'You need to specify a location!'}]})(
-                          <Input placeholder="Location" onChange={this.handleLocationChange} placeholder={this.state.location} />
+                          <Input onChange={this.handleLocationChange} placeholder={this.state.location} />
                       )}
                   </Form.Item>
                   <Form.Item label="Tagged Users">
@@ -481,7 +480,7 @@ class CalendarClass extends React.Component {
 
   getAlertContent = (selectedValue) => {
     let contentToShow;
-    if (localStorage.getItem('isOverlap') == "true"){
+    if (localStorage.getItem('isOverlap') === "true"){
       contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
     }else{
       contentToShow = <Alert message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`} />
@@ -491,7 +490,7 @@ class CalendarClass extends React.Component {
   }
 
   render() {
-    const { value, selectedValue } = this.state;
+    const {selectedValue } = this.state;
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
 
@@ -512,7 +511,7 @@ class CalendarClass extends React.Component {
 
         {this.getAlertContent(selectedValue)}
 
-        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} value={moment()}/>
+        <Calendar onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} value={moment()}/>
       </div>
     );
   }
