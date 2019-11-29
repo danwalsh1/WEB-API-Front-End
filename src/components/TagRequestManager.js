@@ -179,7 +179,7 @@ class TagRequestManager extends React.Component{
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <List dataSource={this.state.tagDisplay} renderItem={item =>
                             <Card title={item.title} style={{ paddingBottom: '20px' }} >
-                                Tagged By: {item.taggedByUserID}
+                                Tagged By: {item.username}
                                 <br />
                                 <Radio.Group onChange={this.handleRadioChange}>
                                     <Radio.Button valuetwo={item.id} value="accept">Accept</Radio.Button>
