@@ -114,7 +114,7 @@ class CommentUI extends React.Component{
         // Validation
 
         // Define valid characters
-        var validLetters = /^[0-9a-zA-Z]+$/;
+        var validLetters = /^[0-9a-zA-Z\s.]+$/;
         // allText (Comment text)
         if (sqlData.allText.length > 280 || typeof sqlData.allText != "string" || !sqlData.allText.match(validLetters)){
             window.alert("Comment content must be less than 280 characters, must all be of type string and must all be alphanumeric.");

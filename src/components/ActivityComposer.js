@@ -37,7 +37,7 @@ class ActivityComposer extends React.Component{
         // Validation --
 
         // Define valid characters
-        var validLetters = /^[0-9a-zA-Z]+$/;
+        var validLetters = /^[0-9a-zA-Z\s.]+$/;
         // Title
         if (activityData.title.length > 20 || typeof activityData.title != "string" || !activityData.title.match(validLetters)){
             window.alert("Title must be less than 20 characters, must be of type string and must be alphanumeric.");

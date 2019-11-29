@@ -51,7 +51,7 @@ class SignUp extends React.Component{
         // Validation
 
        // Define valid characters
-       var validLetters = /^[0-9a-zA-Z]+$/;
+       var validLetters = /^[0-9a-zA-Z\s.]+$/;
        // Username
        if (signUpData.username > 20 || typeof signUpData.username != "string" || !signUpData.username.match(validLetters)){
         window.alert("Username content must be less than 20 characters, must all be of type string and must all be alphanumeric.");
