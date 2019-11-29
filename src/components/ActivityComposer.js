@@ -34,6 +34,36 @@ class ActivityComposer extends React.Component{
 
         const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location, userId: localStorage.getItem('userId')};
 
+        // Validation --
+
+        var invalidLetters = /^[0-9a-zA-Z]+$/;
+        // Title
+        if (activityData.title.length > 20 || typeof activityData.title != "string" || !activityData.title.match(invalidLetters)){
+            window.alert("Title must be less than 20 characters, must be of type string and must be alphanumeric.");
+            return;
+        }
+
+        // Description
+        if (activityData.description.length > 280 || typeof activityData.description != "string" || !activityData.description.match(invalidLetters)){
+            window.alert("Description must be less than 280 characters, must be of type string and must be alphanumeric.");
+            return;
+        }
+
+        // URL
+        if (activityData.url.length > 200 || typeof activityData.url != "string" || !activityData.url.match(invalidLetters)){
+            window.alert("url must be less than 200 characters, must be of type string and must be alphanumeric.");
+            return;
+        }
+
+        // Location
+        if (activityData.location.length > 200 || typeof activityData.location != "string" || !activityData.location.match(invalidLetters)){
+            window.alert("location must be less than 200 characters, must be of type string and must be alphanumeric.");
+            return;
+        }
+
+        
+        // End of validation -- 
+
         // Validate form
         if(activityData.title.length > 0){
             // Title has been given!
