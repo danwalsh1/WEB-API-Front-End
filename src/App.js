@@ -17,8 +17,10 @@ const TagRequestForm = Form.create({name: 'tagRequest'})(TagRequestManager);
 function App() {
   return (
     <div>
-      <TagRequestForm />
       <div className='loginsignup'>
+        <div style={{float: 'left', paddingRight: '10px'}}>
+          <TagRequestForm />
+        </div>
         <LoginForm />
         <SignUpForm />
       </div>

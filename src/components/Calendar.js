@@ -31,7 +31,7 @@ class CalendarClass extends React.Component {
   };
 
   componentDidMount(){
-    if (localStorage.getItem('userId') != 0){
+    if (localStorage.getItem('userId') != 0 && localStorage.getItem('userId') != null){
       // Fetches all activity data from the backend, using the logged in user's ID.
       let URLToFetchFrom = 'http://localhost:8080/api/v1.0/GetActivity/'+this.state.userId;
       fetch(URLToFetchFrom, {
@@ -40,19 +40,30 @@ class CalendarClass extends React.Component {
       .then(res => res.json())
       .then(
           (result) => {
-              const activityCount = result.length / 2
-              console.log(result)
-              this.setState({
-                dataFuncRun: true,
-                dataFromDB: result,
-                activityCount: activityCount
-            });
-          },
-          (error) => {
-          this.setState({
-            dataFuncRun: true,
-              error
-          });
+            var getActivityResult = result;
+
+            fetch('http://localhost:8080/api/v1.0/GetTaggedIn/'+this.state.userId, {
+              method: 'get',
+              headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))},})
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    var i = 0;
+                    for(i = 0; i < result.length; i=i+2){
+                      getActivityResult.splice(getActivityResult.length / 2 , 0 , result[i]);
+                    }
+
+                    var i = 1;
+                    for(i = 1; i < result.length; i=i+2){
+                      getActivityResult.splice(getActivityResult.length, 0 , result[i]);
+                    }
+
+                    const activityCount = getActivityResult.length / 2;
+                    this.setState({
+                      dataFuncRun: true,
+                      dataFromDB: getActivityResult,
+                      activityCount: activityCount
+                  });});
           }
       );
     }
@@ -301,6 +312,28 @@ class CalendarClass extends React.Component {
             formData.append("actFrom", JSON.stringify(activityItemData.from));
 
             console.log(activityItemData);
+
+            // Validation
+
+            // Define valid characters
+            var validLetters = /^[0-9a-zA-Z]+$/;
+            // From
+            if (!(activityItemData.from instanceof Date)){
+              window.alert("From field must be a valid date.");
+              return;
+            }
+            // To
+            if (!(activityItemData.to instanceof Date)){
+              window.alert("To field must be a valid date.");
+              return;
+            }
+            // Location
+            if (activityItemData.location.length > 20 || typeof activityItemData.location != "string" || !activityItemData.location.match(validLetters)){
+              window.alert("Location must be less than 20 characters, must be of type string and must be alphanumeric.");
+              return;
+            }
+
+            // End of validation
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
@@ -439,8 +472,8 @@ class CalendarClass extends React.Component {
   }
 
   getAlertContent = (selectedValue) => {
-    let contentToShow
-    if (localStorage.getItem('isOverlap')){
+    let contentToShow;
+    if (localStorage.getItem('isOverlap') == "true"){
       contentToShow = <Alert message={"The activity you just made overlaps with another activity."} type="warning" />
     }else{
       contentToShow = <Alert message={`You selected date: ${selectedValue && selectedValue.format('YYYY-MM-DD')}`} />
@@ -471,7 +504,7 @@ class CalendarClass extends React.Component {
 
         {this.getAlertContent(selectedValue)}
 
-        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
+        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} value={moment()}/>
       </div>
     );
   }

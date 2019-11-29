@@ -111,6 +111,18 @@ class CommentUI extends React.Component{
         console.log(`Today: ${today}`);
         let sqlData = {userId: localStorage.getItem("userId"), activityId: this.state.activityItemId, allText: this.state.newComment, dateCreated: today, dateModified: today};
 
+        // Validation
+
+        // Define valid characters
+        var validLetters = /^[0-9a-zA-Z]+$/;
+        // allText (Comment text)
+        if (sqlData.allText.length > 280 || typeof sqlData.allText != "string" || !sqlData.allText.match(validLetters)){
+            window.alert("Comment content must be less than 280 characters, must all be of type string and must all be alphanumeric.");
+            return;
+        }
+
+        // End of validation
+
         await fetch('http://localhost:8080/api/v1.0/comments/create', {
             method: 'post',
             body: JSON.stringify(sqlData),
