@@ -118,6 +118,7 @@ class CommentUI extends React.Component{
         // allText (Comment text)
         if (sqlData.allText.length > 280 || typeof sqlData.allText != "string" || !sqlData.allText.match(validLetters)){
             window.alert("Comment content must be less than 280 characters, must all be of type string and must all be alphanumeric.");
+            this.setState({submitting: false});
             return;
         }
 
