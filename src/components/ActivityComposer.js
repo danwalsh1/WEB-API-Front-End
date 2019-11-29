@@ -29,7 +29,7 @@ class ActivityComposer extends React.Component{
         this.setState({visible: true});
     }
 
-    handleOk(ev){
+    async handleOk(ev){
         ev.preventDefault();
 
         const activityData = {title: this.state.title, description: this.state.description, url: this.state.url, location: this.state.location, userId: localStorage.getItem('userId')};
@@ -64,7 +64,7 @@ class ActivityComposer extends React.Component{
         // Validate form
         if(activityData.title.length > 0){
             // Title has been given!
-            fetch('http://localhost:8080/api/v1.0/manage-activity/create', {
+            await fetch('http://localhost:8080/api/v1.0/manage-activity/create', {
                 method: 'post',
                 body: JSON.stringify(activityData),
                 headers: {'Content-Type': 'application/json', 'Authorization' : 'Basic ' + window.btoa(localStorage.getItem("username")+':'+localStorage.getItem("password"))}
