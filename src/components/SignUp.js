@@ -1,6 +1,5 @@
 import React from 'react';
 import {Modal, Button, Form, Icon, Input} from 'antd';
-import { exportDefaultSpecifier } from '@babel/types';
 
 /* USAGE:
 *  To use this component you first need to do:
@@ -48,6 +47,23 @@ class SignUp extends React.Component{
         *  After testing, this function is run when the ok button is pressed, not the "handleSubmit" function
         */
        const signUpData = {username: this.state.username, password: this.state.password};
+
+        // Validation
+
+       // Define valid characters
+       var validLetters = /^[0-9a-zA-Z]+$/;
+       // Username
+       if (signUpData.username > 20 || typeof signUpData.username != "string" || !signUpData.username.match(validLetters)){
+        window.alert("Username content must be less than 20 characters, must all be of type string and must all be alphanumeric.");
+        return;
+       }
+       // Password
+       if (signUpData.password > 100 || typeof signUpData.password != "string" || !signUpData.password.match(validLetters)){
+        window.alert("Password content must be less than 100 characters, must all be of type string and must all be alphanumeric.");
+        return;
+       }
+
+       // End of validation
 
        // Validate fields
        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

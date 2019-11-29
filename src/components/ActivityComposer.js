@@ -43,19 +43,16 @@ class ActivityComposer extends React.Component{
             window.alert("Title must be less than 20 characters, must be of type string and must be alphanumeric.");
             return;
         }
-
         // Description
         if (activityData.description.length > 280 || typeof activityData.description != "string" || !activityData.description.match(validLetters)){
             window.alert("Description must be less than 280 characters, must be of type string and must be alphanumeric.");
             return;
         }
-
         // URL
         if (activityData.url.length > 200 || typeof activityData.url != "string" || !activityData.url.match(validLetters)){
             window.alert("url must be less than 200 characters, must be of type string and must be alphanumeric.");
             return;
         }
-
         // Location
         if (activityData.location.length > 20 || typeof activityData.location != "string" || !activityData.location.match(validLetters)){
             window.alert("location must be less than 20 characters, must be of type string and must be alphanumeric.");
