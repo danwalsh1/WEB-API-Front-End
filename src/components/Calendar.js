@@ -58,7 +58,12 @@ class CalendarClass extends React.Component {
                       getActivityResult.splice(getActivityResult.length, 0 , result[i]);
                     }
 
-                    const activityCount = getActivityResult.length / 2;
+                    var activityCount;
+                    if (getActivityResult.length == 1){
+                      activityCount = 0
+                    }else{
+                      activityCount = getActivityResult.length / 2;
+                    }
                     this.setState({
                       dataFuncRun: true,
                       dataFromDB: getActivityResult,
@@ -333,6 +338,11 @@ class CalendarClass extends React.Component {
               return;
             }
 
+            if(this.state.taggedUsers.includes(localStorage.getItem("username"))){
+              window.alert("You cannot tag yourself.");
+              return;
+            }
+
             // End of validation
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
@@ -345,7 +355,6 @@ class CalendarClass extends React.Component {
               // Get the status of overlapping activities.
               fetch('http://localhost:8080/api/v1.0/manage-activity/get-overlap', {
                 method: 'get',
-                headers: {'Content-Type': 'application/json'},
               }).then(res => res.json())
               .then((result) => {
                 console.log(result);
