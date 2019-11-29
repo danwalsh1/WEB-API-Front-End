@@ -58,12 +58,8 @@ class CalendarClass extends React.Component {
                       getActivityResult.splice(getActivityResult.length, 0 , result[i]);
                     }
 
-                    var activityCount;
-                    if (getActivityResult.length == 1){
-                      activityCount = 0
-                    }else{
-                      activityCount = getActivityResult.length / 2;
-                    }
+                    const activityCount = getActivityResult.length / 2;
+
                     this.setState({
                       dataFuncRun: true,
                       dataFromDB: getActivityResult,
@@ -338,10 +334,13 @@ class CalendarClass extends React.Component {
               return;
             }
 
-            if(this.state.taggedUsers.includes(localStorage.getItem("username"))){
-              window.alert("You cannot tag yourself.");
-              return;
+            if (this.state.taggedUsers != null){
+              if (this.state.taggedUsers.includes(localStorage.getItem("username"))){
+                window.alert("You cannot tag yourself.");
+                return;
+              }
             }
+            
 
             // End of validation
             
