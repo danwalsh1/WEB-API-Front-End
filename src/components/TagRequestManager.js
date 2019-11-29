@@ -168,13 +168,18 @@ class TagRequestManager extends React.Component{
         }
 
         console.log(this.state.tagDisplay);
+        if(localStorage.getItem('userId') != 0){
+        var button = <Button type="primary" onClick={this.showModal} ghost={!this.state.tagRequestAlert}>
+                        <Icon type="exclamation-circle" spin={this.state.tagRequestAlert} style={{ fontSize: '17px'}} />
+                        Tag Requests
+                    </Button>
+        }else{
+            button = null;
+        }
 
         const element = (
             <div>
-                <Button type="primary" onClick={this.showModal} ghost={!this.state.tagRequestAlert}>
-                    <Icon type="exclamation-circle" spin={this.state.tagRequestAlert} style={{ fontSize: '17px'}} />
-                    Tag Requests
-                </Button>
+                {button}
                 <Modal title="Activity Tag Requests" visible={this.state.visible} okText="Confirm" onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                         <List dataSource={this.state.tagDisplay} renderItem={item =>
