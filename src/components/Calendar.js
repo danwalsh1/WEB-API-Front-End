@@ -316,7 +316,7 @@ class CalendarClass extends React.Component {
             // Validation
 
             // Define valid characters
-             var validLetters = /^[0-9a-zA-Z]+$/;
+            var validLetters = /^[0-9a-zA-Z]+$/;
             // From
             if (!(activityItemData.from instanceof Date)){
               window.alert("From field must be a valid date.");
