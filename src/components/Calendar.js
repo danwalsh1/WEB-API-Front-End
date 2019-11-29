@@ -312,6 +312,28 @@ class CalendarClass extends React.Component {
             formData.append("actFrom", JSON.stringify(activityItemData.from));
 
             console.log(activityItemData);
+
+            // Validation
+
+            // Define valid characters
+             var validLetters = /^[0-9a-zA-Z]+$/;
+            // From
+            if (!(activityItemData.from instanceof Date)){
+              window.alert("From field must be a valid date.");
+              return;
+            }
+            // To
+            if (!(activityItemData.to instanceof Date)){
+              window.alert("To field must be a valid date.");
+              return;
+            }
+            // Location
+            if (activityItemData.location.length > 20 || typeof activityItemData.location != "string" || !activityItemData.location.match(validLetters)){
+              window.alert("Location must be less than 20 characters, must be of type string and must be alphanumeric.");
+              return;
+            }
+
+            // End of validation
             
             fetch('http://localhost:8080/api/v1.0/manage-activity/create-item', {
               method: 'post',
