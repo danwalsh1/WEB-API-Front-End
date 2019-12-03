@@ -122,9 +122,16 @@ class ActivityComposer extends React.Component{
             }
         }
 
+        var doHidden;
+        if (localStorage.getItem("userId") == 0){
+            doHidden = {display: "none"};
+        }else{
+            doHidden = null;
+        }
+
         const element = (
             <div>
-                <Button type="primary" onClick={this.showModal}>
+                <Button type="primary" onClick={this.showModal} style={doHidden}>
                     <Icon type="plus" />
                 </Button>
                 <Modal title="Add Activity" visible={this.state.visible} okText="Add" onOk={this.handleOk} onCancel={this.handleCancel}>
