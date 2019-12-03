@@ -83,6 +83,8 @@ class CalendarClass extends React.Component {
     var dd = datetime.getDate();
     var mm = datetime.getMonth();
     var yyyy = datetime.getFullYear();
+
+    if (mm == 0) { mm = '12'; yyyy=yyyy-1}
     if(dd < 10) { dd = '0' + dd; } 
     if(mm < 10) { mm = '0' + mm; }
     const activityDate = dd + '-' + mm + '-' + yyyy;
