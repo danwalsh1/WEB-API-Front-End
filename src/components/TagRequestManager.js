@@ -27,7 +27,7 @@ class TagRequestManager extends React.Component{
 
     getTagRequests(){
         console.log(localStorage.getItem('userId'))
-        if (!this.state.requestsRecieved && localStorage.getItem('userId') !== 0){
+        if (!this.state.requestsRecieved && localStorage.getItem('userId') != 0){
             // Get open requests
             let fetchURL = 'http://localhost:8080/api/v1.0/get-tag/open-user/' + localStorage.getItem("userId");
 
@@ -101,7 +101,7 @@ class TagRequestManager extends React.Component{
             // User has accepted or rejected tag requests
             for(let x = 0; x < Object.keys(this.state.userOptions).length; x++){
                 let sqlId = parseInt(Object.keys(this.state.userOptions)[x], 10);
-                if(this.state.userOptions[Object.keys(this.state.userOptions)[x]] === "accept"){
+                if(this.state.userOptions[Object.keys(this.state.userOptions)[x]] == "accept"){
                     let sqlData = {id: sqlId, accepted: true};
                     await fetch('http://localhost:8080/api/v1.0/update-tag/update', {
                         method: 'put',
@@ -155,6 +155,8 @@ class TagRequestManager extends React.Component{
     /* Form Functions - End */
 
     render(){
+        const {getFieldDecorator} = this.props.form;
+
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},
@@ -166,7 +168,7 @@ class TagRequestManager extends React.Component{
         }
 
         console.log(this.state.tagDisplay);
-        if(localStorage.getItem('userId') !== 0){
+        if(localStorage.getItem('userId') != 0){
         var button = <Button type="primary" onClick={this.showModal} ghost={!this.state.tagRequestAlert}>
                         <Icon type="exclamation-circle" spin={this.state.tagRequestAlert} style={{ fontSize: '17px'}} />
                         Tag Requests
