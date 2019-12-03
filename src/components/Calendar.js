@@ -28,6 +28,7 @@ class CalendarClass extends React.Component {
     taggedUsers: null,
     uploadedFile: null,
     isOverlap: localStorage.getItem('isOverlap'),
+    panelChanged:false,
   };
 
   componentDidMount(){
@@ -160,7 +161,7 @@ class CalendarClass extends React.Component {
   }
 
   onPanelChange = value => {
-    this.setState({ value });
+    this.setState({ value, panelChanged: true });
   };
 
   showModal = () =>{
@@ -493,7 +494,13 @@ class CalendarClass extends React.Component {
   }
 
   render() {
-    const { value, selectedValue } = this.state;
+    const { value, selectedValue, panelChanged} = this.state;
+    var newValue = 0;
+    if (panelChanged){
+      newValue = value
+    }else{
+      newValue = moment();
+    }
     return (
       <div className='calendar' id={this.props.id} onDrop={this.drop} onDragOver={this.allowDrop}>
 
@@ -514,7 +521,7 @@ class CalendarClass extends React.Component {
 
         {this.getAlertContent(selectedValue)}
 
-        <Calendar value={value} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender} value={moment()}/>
+        <Calendar value={newValue} onSelect={this.onSelect} onPanelChange={this.onPanelChange} dateCellRender={this.dateCellRender}/>
       </div>
     );
   }
